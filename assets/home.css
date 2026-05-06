@@ -1,0 +1,1027 @@
+/* Landing page styles - loaded only via landing.html.twig */
+@layer components {
+
+  /* ============================================================
+     landing sections  (snap disabled — was fighting Chrome scroll perf)
+     ============================================================ */
+  html.has-snap-landing {
+    scroll-padding-block-start: 0;
+  }
+
+  .landing {
+    overflow-x: clip;
+  }
+
+
+  .snap-section {
+    /* No more forced 100vh — sections size to content. Hero keeps its own height. */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-block: var(--space-xl);
+  }
+
+  /* Hero is the one exception — keeps a generous height so the logo can breathe. */
+  .snap-section--hero { min-block-size: 90vh; }
+
+  /* No forced min-height on these sections */
+  #community { min-block-size: auto; }
+
+  .snap-section-inner {
+    max-inline-size: 72rem;
+    inline-size: 100%;
+    padding-inline: var(--space-m);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-l);
+  }
+
+  .site-start-link {
+    position: absolute;
+    inset-block-start: var(--space-m);
+    inset-inline-start: var(--space-m);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: var(--space-2xs);
+    font-size: calc(var(--text-xs) - 1px);
+    font-weight: var(--w-medium);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    text-decoration: none;
+    border-radius: var(--radius-s);
+    opacity: 0;
+    animation: g-in 0.8s ease-out 3s forwards;
+    transition: color 0.15s var(--ease-soft);
+    &:hover { color: var(--ink-0); }
+  }
+
+  .snap-section--hero {
+    overflow: clip;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .snap-section--pillars {
+    background: light-dark(var(--surface-0), var(--surface-0));
+  }
+
+  .snap-pillars-title {
+    font-size: var(--text-xl);
+    font-weight: var(--w-thin);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-0);
+    text-align: center;
+  }
+
+  .snap-scroll-hint {
+    position: absolute;
+    inset-block-end: var(--space-l);
+    translate: -50% 0;
+    margin: 0;
+
+    & svg {
+      inline-size: 64px;
+      block-size: 64px;
+    }
+  }
+
+  /* ============================================================
+     hero-background  (orbit arcs + construction lines)
+     ============================================================ */
+  .landing-hero-bg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+  }
+
+  /* --- Shared SVG element base ----------------------------- */
+  .hbg { fill: none; transform-box: fill-box; transform-origin: center; }
+
+  /* --- Orbit arcs - loop, fade in 0→0.8s, fade out 4.4→5s - */
+  .hbg-orbit {
+    stroke-width: 2;
+    stroke-opacity: 0.35;
+    opacity: 0;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  /* r=120 medium - 1.75s/rev */
+  .hbg-orbit--1 {
+    stroke: var(--hero-primary);
+    stroke-dasharray: 100 654;
+    animation:
+      orbit-spin 1.75s 2 linear,
+      orbit-fade 5s linear both;
+  }
+
+  /* r=170 big - 2s/rev (2 rotations in 4s) */
+  .hbg-orbit--2 {
+    stroke: var(--hero-secondary);
+    stroke-dasharray: 140 928;
+    animation:
+      orbit-spin 2s 3 linear reverse,
+      orbit-fade 5s 0.12s linear both;
+  }
+
+  /* r=90 small - 1.5s/rev (2 rotations in 3s) */
+  .hbg-orbit--3 {
+    stroke: var(--hero-primary);
+    stroke-dasharray: 70 495;
+    animation:
+      orbit-spin 1.5s linear 4,
+      orbit-fade 5s 0.06s linear both;
+  }
+
+  @keyframes orbit-spin {
+    to { rotate: 360deg; }
+  }
+
+  @keyframes orbit-fade {
+    0%   { opacity: 0; }
+    16%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* --- Construction lines - staggered flash ----------------- */
+  .hbg-bolt { stroke-opacity: 0; }
+
+  /* Left branch of the A - steep angle */
+  .hbg-bolt--1 {
+    stroke: var(--hero-secondary);
+    stroke-width: 1.0;
+    transform: translate(-70px, 20px) rotate(-68deg);
+    stroke-dasharray: 5450;
+    stroke-dashoffset: 5450;
+    animation: bolt-line 2s -0.05s linear 1 forwards;
+  }
+
+  /* Right branch of the A - mirror of bolt--1 */
+  .hbg-bolt--3 {
+    stroke: var(--hero-secondary);
+    stroke-width: 1.0;
+    transform: translate(70px, 20px) rotate(68deg);
+    stroke-dasharray: 5450;
+    stroke-dashoffset: -5450;
+    animation: bolt-line 2s 1.20s linear 1 forwards;
+  }
+
+  /* Late diagonal */
+  .hbg-bolt--5 {
+    stroke: var(--hero-secondary);
+    stroke-width: 0.8;
+    transform: translate(100px, 80px) rotate(35deg);
+    stroke-dasharray: 5450;
+    stroke-dashoffset: 5450;
+    animation: bolt-line 2s 0.65s linear 1 forwards;
+  }
+
+  @keyframes bolt-line {
+    0%   { stroke-dashoffset: 5450; stroke-opacity: 0; stroke-width: 2; }
+    2%   { stroke-dashoffset: 5450;    stroke-opacity: 1; stroke: oklch(0.85 0.08 235); stroke-width: 2; }
+    12%   { stroke-dashoffset: 0;    stroke-opacity: 0.2; stroke: oklch(0.85 0.08 235); stroke-width: 2; }
+    12%   { stroke-dashoffset: -400;    stroke-opacity: 1; stroke: black; stroke-width: 2; }
+    80%   { stroke-dashoffset: 0;    stroke-opacity: 0; stroke: black; stroke-width: 1; }
+  }
+
+  /* ============================================================
+     hero-logo  (three-layer drawing animation)
+     ============================================================ */
+  .landing-hero-inner {
+    grid-row: 2;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .landing-logo-wrap {
+    position: relative;
+    block-size: clamp(120px, 25vw, 190px);
+    inline-size: clamp(135px, 28vw, 210px);
+    margin-block-start: clamp(0rem, 3dvh, 2rem);
+    margin-block-end: 2rem;
+    animation: logo-appear 5s linear both;
+  }
+
+  .landing-logo {
+    position: absolute;
+    inset: 0;
+    block-size: 100%;
+    inline-size: auto;
+    margin-inline: auto;
+    overflow: visible;
+  }
+
+  .landing-logo--deep {
+    translate: 2px 2px;
+    & path {
+      stroke: light-dark(oklch(0.35 0.17 290), oklch(0.45 0.17 290));
+      stroke-width: 7;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      fill: transparent;
+      stroke-dasharray: 6400;
+      stroke-dashoffset: 6400;
+      animation:
+        logo-draw 3s 0.25s linear forwards,
+        logo-clone-fade 3.4s 2.45s var(--ease-soft) forwards;
+      animation-composition: accumulate;
+    }
+  }
+
+  .landing-logo--mid {
+    translate: -2px -1px;
+    & path {
+      stroke: light-dark(oklch(0.40 0.14 235), oklch(0.55 0.14 235));
+      stroke-width: 7;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      fill: transparent;
+      stroke-dasharray: 6400;
+      stroke-dashoffset: 6400;
+      animation:
+        logo-draw 3s 0s linear forwards,
+        logo-clone-fade 3.4s 2.45s var(--ease-soft) forwards;
+      animation-composition: accumulate;
+    }
+  }
+
+  .landing-logo--front {
+    view-transition-name: site-logo;
+    & path {
+      stroke: url(#logo-grad);
+      stroke-width: 7;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      fill: transparent;
+      stroke-dasharray: 6400;
+      stroke-dashoffset: 6400;
+      animation:
+        logo-draw 3s 0s linear forwards,
+        logo-stroke-grow 0.4s 2.45s linear forwards;
+    }
+  }
+
+  @keyframes logo-draw       { to { stroke-dashoffset: 0; } }
+  @keyframes logo-clone-fade { to { opacity: 0; } }
+
+  @keyframes logo-stroke-grow {
+    0%   { stroke-width: 8; }
+    50%  { stroke-width: 9; }
+    100% { stroke-width: 10; }
+  }
+
+  @keyframes logo-appear {
+    from { scale: 0.92; }
+    to   { scale: 1.0; }
+  }
+
+  /* ============================================================
+     hero-text  (slide-up lines)
+     ============================================================ */
+  .landing-title {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: var(--text-xl);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-block: 1.5rem .75rem;
+    color: var(--ink-0);
+    animation: slide-up-bounce 1.5s 1.75s var(--ease-bounce) both;
+  }
+  .landing-title-atelier { font-weight: 200; }
+  .landing-title-svg     { font-weight: 300; }
+
+  .landing-hero-sub {
+    font-size: var(--text-s);
+    color: var(--ink-1);
+    font-weight: var(--w-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    margin-block: 0;
+    animation: slide-up-bounce 1.45s 2.25s var(--ease-bounce) both;
+  }
+
+  .landing-promise {
+    font-size: var(--text-xs);
+    color: var(--ink-2);
+    font-weight: var(--w-regular);
+    letter-spacing: 0.04em;
+    margin-block-start: var(--space-2xs);
+    margin-block-end: var(--space-l);
+    
+    .line {
+      display: block;
+      text-align: center;
+      text-transform: uppercase;
+      animation: slide-up-bounce 1.5s 3.5s var(--ease-bounce) both;
+      .line + & {
+        animation-delay: 3.75s;
+      }
+      &:last-child {
+        animation-delay: 4s;
+      }
+    }
+  }
+
+  @keyframes slide-up-bounce {
+    from { opacity: 0; translate: 0 2rem; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+
+  /* ============================================================
+     landing-btns
+     ============================================================ */
+  .landing-cta-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    margin-block-start: var(--space-m);
+    animation: fade-up 0.6s 3.6s var(--ease-out) both;
+  }
+
+  .landing-btn {
+    display: inline-block;
+    padding: 0.65em 1.6em;
+    border-radius: 100px;
+    font-size: var(--text-s);
+    font-weight: var(--w-medium);
+    text-decoration: none;
+    background: var(--color-brand);
+    color: light-dark(oklch(0.97 0.01 60), oklch(0.10 0.02 60));
+    transition: opacity 0.15s var(--ease-out);
+    &:hover { opacity: 0.82; }
+  }
+
+  .landing-btn--ghost {
+    background: transparent;
+    color: var(--ink-1);
+    border: 1px solid var(--border-0);
+    &:hover { opacity: 1; border-color: var(--ink-2); color: var(--ink-0); }
+  }
+
+  /* ============================================================
+     landing-cards
+     ============================================================ */
+  .landing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-l);
+  }
+
+  .landing-card {
+    position: relative;
+    border-radius: var(--radius-l);
+    overflow: hidden;
+    color: var(--ink-0);
+    opacity: 0;
+    translate: 0 20px;
+    background: light-dark(transparent, var(--surface-1));
+    border: 1px solid light-dark(var(--border-0), transparent);
+    /* Explicit property list, no `all`. `all` interacts badly with the
+       scroll-driven animation below (it can pick up phantom changes when
+       :has(a:hover) flips a recalc), causing a hover flash. */
+    transition:
+      opacity 0.5s var(--ease-soft) var(--enter-delay, 0s),
+      translate 0.5s var(--ease-soft) var(--enter-delay, 0s);
+
+    &.is-visible { opacity: 1; translate: 0 0; }
+
+    &:has(a:hover) {
+      translate: 0 -4px;
+      background: light-dark(var(--surface-0), var(--color-brand-soft));
+      border-color: light-dark(var(--color-brand), transparent);
+      transition:
+        translate 0.2s var(--ease-bounce),
+        background 0.2s var(--ease-soft),
+        border-color 0.2s var(--ease-soft);
+    }
+  }
+
+  /* Stagger delays left to right, top to bottom (entry only). */
+  .landing-grid .landing-card:nth-child(1) { --enter-delay: 0.05s; }
+  .landing-grid .landing-card:nth-child(2) { --enter-delay: 0.17s; }
+  .landing-grid .landing-card:nth-child(3) { --enter-delay: 0.29s; }
+  .landing-grid .landing-card:nth-child(4) { --enter-delay: 0.41s; }
+  .landing-grid .landing-card:nth-child(5) { --enter-delay: 0.53s; }
+  .landing-grid .landing-card:nth-child(6) { --enter-delay: 0.65s; }
+
+  /* Scroll-driven reveal where supported.
+     Replaces the JS IntersectionObserver path with a viewport-tied animation,
+     so cards fade in progressively as they enter view (and reverse on scroll up).
+     Uses `transform` (not `translate`) so it composes with the hover `translate`. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .landing-card {
+        opacity: 1;
+        translate: 0 0;
+        animation: landing-card-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 5% cover 30%;
+      }
+      /* Column-based offset gives a horizontal stagger within each row. */
+      .landing-grid .landing-card:nth-child(3n+2) { animation-range: entry 12% cover 37%; }
+      .landing-grid .landing-card:nth-child(3n)   { animation-range: entry 19% cover 44%; }
+    }
+  }
+
+  @keyframes landing-card-reveal {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .landing-card-hero {
+    overflow: hidden;
+    opacity: 0.55;
+    transition: opacity 0.4s var(--ease-soft);
+    padding: var(--space-m) var(--space-m) 0;
+
+    .landing-card:has(a:hover) & { opacity: 1; }
+    & .page-hero { margin: 0; }
+  }
+
+  .landing-card-body {
+    padding: var(--space-m);
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .landing-card h3 {
+    font-size: var(--text-m);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-0);
+    margin: 0;
+
+    & a {
+      text-decoration: none;
+      color: inherit;
+      &::after { content: ''; position: absolute; inset: 0; }
+    }
+  }
+
+  .landing-card p {
+    font-size: var(--text-s);
+    color: var(--ink-1);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ============================================================
+     landing-community  (bottom cards)
+     ============================================================ */
+  .landing-bottom-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-l);
+    margin-block-start: var(--space-l);
+    padding-block-end: var(--space-xl);
+
+    /* Dashed connector at icon-center height */
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block-start: calc(var(--space-m) + 20px); /* icon center ~56px from top */
+      inset-inline-start: calc(33.33% + var(--space-l) * 0.25);
+      inset-inline-end: calc(33.33% + var(--space-l) * 0.25);
+      border-block-start: 1px dashed var(--border-0);
+      pointer-events: none;
+    }
+  }
+
+  .landing-bottom-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    padding: var(--space-m) var(--space-m);
+    background: light-dark(transparent, var(--surface-1));
+    border: 1px solid light-dark(var(--border-0), transparent);
+    border-radius: var(--radius-l);
+    color: var(--ink-0);
+    transition:
+      translate 0.3s var(--ease-soft),
+      background 0.3s var(--ease-soft),
+      border-color 0.3s var(--ease-soft);
+
+    &:has(a:hover) {
+      background: light-dark(var(--surface-0), var(--color-brand-soft));
+      border-color: light-dark(var(--color-brand), transparent);
+      translate: 0 -3px;
+      transition:
+        translate 0.2s var(--ease-bounce),
+        background 0.2s var(--ease-soft),
+        border-color 0.2s var(--ease-soft);
+    }
+
+    & h3 {
+      font-size: var(--text-s);
+      font-weight: var(--w-semi);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-0);
+      margin: 0;
+      & a {
+        text-decoration: none;
+        color: inherit;
+        &::after { content: ''; position: absolute; inset: 0; }
+      }
+    }
+
+    & p { font-size: var(--text-xs); color: var(--ink-2); margin: 0; line-height: 1.5; }
+  }
+
+  .landing-bottom-icon {
+    inline-size: 36px;
+    block-size: 36px;
+    color: var(--color-brand);
+    margin-block-end: var(--space-xs);
+    transition: color 0.3s var(--ease-soft);
+    opacity: 0.7;
+  }
+
+  .landing-bottom-card:has(a:hover) .landing-bottom-icon { opacity: 1; }
+
+  /* ============================================================
+     community - intro + github CTA
+     ============================================================ */
+  .landing-community-intro {
+    font-size: var(--text-m);
+    color: var(--ink-1);
+    text-align: center;
+    max-inline-size: 42ch;
+    margin-inline: auto;
+    margin-block: var(--space-l) var(--space-xl);
+    line-height: 1.7;
+  }
+
+  .landing-github-cta {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-m);
+    font-weight: var(--w-thin);
+    letter-spacing: 0.02em;
+    color: var(--ink-1);
+    text-decoration: none;
+    border: 1px solid var(--border-0);
+    padding: var(--space-s) var(--space-xl);
+    border-radius: 100px;
+    margin-block-start: clamp(3rem, 6vw, 5rem);
+    margin-block-end: var(--space-xl);
+    transition: border-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
+
+    &:hover { color: var(--ink-0); border-color: var(--color-brand); }
+  }
+
+  .landing-github-cta-svg {
+    color: var(--color-brand);
+    font-weight: var(--w-semi);
+  }
+
+  /* ============================================================
+     landing-eyebrow  /  feature-list  /  doc-link  /  install
+     ============================================================ */
+  .landing-eyebrow {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: var(--w-semi);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-brand);
+    margin-block-end: var(--space-xs);
+  }
+
+  .landing-install {
+    margin-block-end: var(--space-l);
+
+    & code {
+      font-family: var(--font-mono);
+      font-size: var(--text-m);
+      font-weight: var(--w-regular);
+      color: var(--ink-1);
+      background: light-dark(oklch(0 0 0 / 0.04), oklch(0 0 0 / 0.4));
+      border: 1px solid var(--ink-2);
+      padding: 0.6em 1.8em;
+      border-radius: 100px;
+      display: inline-block;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  .landing-install-cmd { }
+  .landing-install-pkg { color: var(--color-brand); font-weight: var(--w-semi); }
+
+  @keyframes composer-drop {
+    0%   { opacity: 0; translate: 0 -20px; scale: 1.1; }
+    100% { opacity: 1; translate: 0 0;     scale: 1; }
+  }
+
+  /* ============================================================
+     landing-misc  (baseline, size-diff, spec-claim)
+     ============================================================ */
+  .landing-baseline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    padding: var(--space-l) var(--space-m);
+    font-size: var(--text-s);
+    font-weight: var(--w-regular);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-2);
+    max-inline-size: 72rem;
+    margin-inline: auto;
+    &::before, &::after { content: ''; flex: 1; block-size: 1px; background: var(--border-0); }
+  }
+
+  .landing-size-diff {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    margin-block: var(--space-m);
+    font-family: var(--font-mono);
+  }
+
+  .landing-size-before { font-size: var(--text-l); color: var(--ink-2); text-decoration: line-through; text-decoration-color: var(--ink-2); }
+  .landing-size-arrow  { font-size: var(--text-m); color: var(--ink-2); }
+  .landing-size-after  { font-size: var(--text-2xl); font-weight: var(--w-bold); color: var(--ink-0); letter-spacing: -0.02em; }
+  .landing-size-pct    { font-size: var(--text-m); color: var(--c-green); font-weight: var(--w-medium); }
+
+  .landing-spec-claim {
+    margin-block-start: var(--space-l);
+    font-size: var(--text-s);
+    color: var(--ink-2);
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  /* ============================================================
+     landing-scroll-hint
+     ============================================================ */
+  .landing-scroll-hint {
+    display: block;
+    margin-block-start: var(--space-m);
+    text-decoration: none;
+    animation: fade-up 0.6s 3.8s var(--ease-out) both;
+
+    & svg {
+      inline-size: 44px;
+      block-size: 44px;
+      color: var(--ink-2);
+      transition: color 0.2s var(--ease-out);
+      animation: scroll-bob 2.4s 4.2s ease-in-out infinite;
+    }
+
+    &:hover svg { color: var(--color-brand); }
+  }
+
+  @keyframes scroll-bob {
+    0%, 100% { translate: 0 0; }
+    50%       { translate: 0 5px; }
+  }
+
+  /* ============================================================
+     landing-sections  (page structure)
+     ============================================================ */
+  .landing { min-block-size: 100vh; }
+
+  .landing-section { padding: clamp(5rem, 4rem + 3cqi, 9rem) var(--space-m); }
+
+  .landing-section--alt {
+    background: light-dark(oklch(0.94 0.018 58), oklch(0.11 0.012 260));
+  }
+
+  .landing-section-inner { max-inline-size: 72rem; margin-inline: auto; }
+
+  .landing-section-title {
+    font-size: var(--text-xl);
+    font-weight: var(--w-thin);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-0);
+    width: min(600px, 80vw);
+    display: block;
+    margin-inline: auto;
+    margin-block: 0 4rem;
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .landing-section-intro {
+    font-size: var(--text-s);
+    color: var(--ink-2);
+    text-align: center;
+    margin-block-end: var(--space-xl);
+  }
+
+  #features, #docs {
+    background: light-dark(oklch(0.93 0.012 60), oklch(0.11 0.020 260));
+  }
+
+  #docs { margin-block-end: var(--space-xl); }
+
+  /* ============================================================
+     landing-stats
+     ============================================================ */
+  .landing-stats {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: var(--space-xl) var(--space-m);
+    text-align: center;
+    inline-size: 100%;
+    min-block-size: auto;
+  }
+
+  .landing-stat {
+    padding-inline: clamp(0.5rem, 1.5cqi, 2rem);
+    padding-block: var(--space-xs);
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      inset-inline-end: 0;
+      inset-block: 20% 20%;
+      inline-size: 1px;
+      background: var(--border-0);
+    }
+  }
+
+  .landing-stat-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-l);
+    font-weight: var(--w-bold);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: light-dark(oklch(0.48 0.16 55), oklch(0.78 0.18 55));
+  }
+
+  .landing-stat-label {
+    display: block;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-2);
+    font-weight: var(--w-regular);
+    margin-block-start: 0.6em;
+  }
+
+  /* ============================================================
+     hero CTA buttons  (appear after animation ends ~5.5s)
+     Positioned vertically centered between animation and bottom
+     ============================================================ */
+  .hero-ctas {
+    position: absolute;
+    inset-block-end: calc(var(--space-xl) * 1.5);
+    z-index: 2;
+    display: flex;
+    gap: var(--space-l);
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-inline: var(--space-m);
+    opacity: 0;
+    animation: g-in 1s ease-out 5s forwards;
+  }
+
+  @keyframes g-in { to { opacity: 1 } }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-m);
+    border-radius: 9999px;
+    border-style: solid;
+    border-width: 1px;
+    font-size: var(--text-s);
+    font-weight: var(--w-medium);
+    text-decoration: none;
+    transition: translate 0.15s ease, border-color 0.15s ease, border-width 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+    &:hover { translate: 0 -1px; border-width: 2px; }
+  }
+
+  .hero-cta--discover {
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+    opacity: 0.85;
+  }
+
+  .hero-cta--discover:hover {
+    opacity: 1;
+  }
+
+  .hero-cta--github {
+    border-color: var(--border-0);
+    color: var(--ink-1);
+    font-family: var(--font-mono);
+  }
+
+  .hero-cta--github:hover {
+    border-color: var(--ink-0);
+    color: var(--ink-0);
+  }
+
+  .hero-cta--github svg {
+    transform: scale(1.3);
+  }
+
+  .hero-cta-svg {
+    color: var(--color-brand);
+  }
+
+  /* ============================================================
+     hero stats  (reassurance row - below logo on mobile,
+     above CTAs on big screens)
+     ============================================================ */
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: clamp(1rem, 5vw, 1.75rem);
+    row-gap: var(--space-s);
+    margin: 0;
+    padding-inline: var(--space-m);
+    margin-block-start: var(--space-l);
+  }
+
+  @media (min-width: 56rem) {
+    .hero-stats {
+      position: absolute;
+      inset-block-end: calc(var(--space-xl) * 3 + 2.6rem);
+      inset-inline: 0;
+      z-index: 2;
+      column-gap: clamp(1.5rem, 3vw, 3rem);
+      margin-block-start: 0;
+    }
+  }
+
+  .hero-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    line-height: 1.1;
+    transform-origin: center bottom;
+    opacity: 0;
+    animation: hero-stat-in 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 4.6s;
+  }
+
+  .hero-stat:nth-child(1) { animation-delay: 2.6s; }
+  .hero-stat:nth-child(2) { animation-delay: 2.8s; }
+  .hero-stat:nth-child(3) { animation-delay: 3.0s; }
+  .hero-stat:nth-child(4) { animation-delay: 3.2s; }
+  .hero-stat:nth-child(5) { animation-delay: 3.4s; }
+  .hero-stat:nth-child(6) { animation-delay: 3.6s; }
+
+  @keyframes hero-stat-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .hero-stat dt {
+    font-size: 0.6875rem;
+    font-weight: var(--w-thin);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+
+  .hero-stat dd {
+    margin: 0;
+    font-size: var(--text-xs);
+    font-weight: var(--w-medium);
+    letter-spacing: 0.04em;
+    color: var(--ink-0);
+  }
+
+  /* ============================================================
+     hero words  (orbit labels around animation)
+     ============================================================ */
+  .hero-anim-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  #guides {
+    min-block-size: auto;
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+
+  #guides .landing-section-inner { gap: var(--space-l); }
+
+  #community {
+    padding-block: clamp(4rem, 8vw, 6rem);
+  }
+
+  #community .landing-section-inner { gap: var(--space-xl); }
+
+  /* ============================================================
+     community links (no cards)
+     ============================================================ */
+  .landing-community-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2xl);
+    flex-wrap: wrap;
+  }
+
+  .landing-community-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--ink-1);
+    transition: color 0.15s var(--ease-soft);
+    max-width: 14rem;
+    text-align: center;
+    &:hover { color: var(--ink-0); }
+    &:hover .landing-bottom-icon { opacity: 1; }
+    & strong { font-size: var(--text-m); font-weight: var(--w-semi); color: var(--ink-0); }
+    & span { font-size: var(--text-s); color: var(--ink-2); line-height: 1.5; }
+  }
+
+  /* Logo break between pillar pairs */
+
+  .landing-install-cmd {
+    font-family: var(--font-mono);
+    font-size: var(--text-m);
+    color: var(--ink-0);
+    letter-spacing: 0.02em;
+    padding: 1rem 1.66rem;
+    border-radius: 2rem;
+    background: #000;
+    border: .5px solid var(--color-brand);
+  }
+
+  /* ============================================================
+     Responsive overrides (landing-specific)
+     ============================================================ */
+  @media (max-width: 52rem) {
+    :is(.landing-grid, .landing-bottom-grid) { grid-template-columns: 1fr; }
+
+    .landing-code-section { grid-template-columns: 1fr; }
+
+    .landing-logo-wrap { margin-block-start: 3rem; }
+
+    .landing-stats { grid-template-columns: repeat(3, 1fr); padding: var(--space-l) var(--space-s); }
+
+    :is(.landing-stat:nth-child(3), .landing-stat:nth-child(6))::after { display: none; }
+
+    .snap-section--hero {
+      padding-block-end: clamp(7rem, 14vh, 9rem);
+    }
+  }
+}
+
+/* ============================================================
+   Overrides - reduced-motion (landing-specific)
+   ============================================================ */
+@layer overrides {
+  @media (prefers-reduced-motion: reduce) {
+    .landing-card {
+      opacity: 1 !important;
+      translate: 0 !important;
+    }
+
+    .landing-logo path {
+      stroke-dashoffset: 0 !important;
+      fill: currentColor !important;
+      stroke-width: 0 !important;
+    }
+  }
+
+  /* Same final-state shortcut for visitors who saw the hero in the last hour. */
+  html.has-seen-hero .landing-logo path {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    fill: currentColor !important;
+    stroke-width: 0 !important;
+  }
+  html.has-seen-hero .landing-logo-wrap { animation: none !important; }
+}

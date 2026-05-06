@@ -1,0 +1,39 @@
+/* ================================================================
+   Atelier SVG Documentation
+   @layer, oklch, light-dark(), grid, @scope, nesting
+   ================================================================ */
+
+/* Layer order must be declared before any @import */
+@layer reset, tokens, base, layout, components, utilities, overrides;
+
+@import "tokens.css";
+@import "base.css";
+@import "layouts.css";
+@import "components.css";
+
+/* ================================================================
+   UTILITIES
+   ================================================================ */
+@layer utilities {
+  :where(.visually-hidden) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+/* ================================================================
+   OVERRIDES
+   ================================================================ */
+@layer overrides {
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

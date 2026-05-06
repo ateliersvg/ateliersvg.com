@@ -1,0 +1,88 @@
+/* Syntax Highlighting - Polar theme (alto/code-highlight, oklch + light-dark) */
+
+.polar-comment,
+.polar-comment-doc {
+  color: light-dark(oklch(0.48 0.13 290), oklch(0.72 0.13 290));
+  font-style: italic;
+}
+
+.polar-keyword,
+.polar-keyword-declaration,
+.polar-keyword-control {
+  color: light-dark(oklch(0.38 0.16 38), oklch(0.74 0.14 230));
+}
+
+.polar-keyword-operator {
+  color: light-dark(oklch(0.38 0.14 230), oklch(0.74 0.10 230));
+}
+
+.polar-operator {
+  color: light-dark(oklch(0.40 0.10 220), oklch(0.78 0.10 200));
+}
+
+.polar-punctuation {
+  color: inherit;
+}
+
+.polar-string,
+.polar-string-interpolated {
+  color: light-dark(oklch(0.38 0.14 155), oklch(0.72 0.11 140));
+}
+
+.polar-number {
+  color: light-dark(oklch(0.40 0.18 25), oklch(0.74 0.15 50));
+}
+
+.polar-boolean,
+.polar-null {
+  color: light-dark(oklch(0.40 0.14 45), oklch(0.72 0.14 45));
+}
+
+.polar-variable,
+.polar-variable-parameter,
+.polar-variable-property {
+  color: light-dark(oklch(0.35 0.14 260), oklch(0.78 0.10 200));
+}
+
+.polar-variable-this {
+  color: light-dark(oklch(0.38 0.16 38), oklch(0.78 0.12 60));
+}
+
+.polar-function-definition {
+  color: light-dark(oklch(0.35 0.14 230), oklch(0.80 0.12 220));
+}
+
+.polar-function-call {
+  color: light-dark(oklch(0.35 0.14 230), oklch(0.78 0.10 200));
+}
+
+.polar-class-definition {
+  color: light-dark(oklch(0.35 0.14 260), oklch(0.70 0.12 250));
+}
+
+.polar-class-name {
+  color: light-dark(oklch(0.35 0.14 260), oklch(0.70 0.12 250));
+}
+
+.polar-constant,
+.polar-constant-magic,
+.polar-constant-class {
+  color: light-dark(oklch(0.40 0.14 55), oklch(0.78 0.12 60));
+}
+
+.polar-enum-case {
+  color: light-dark(oklch(0.40 0.18 25), oklch(0.74 0.15 300));
+}
+
+.polar-typehint {
+  color: light-dark(oklch(0.36 0.16 175), oklch(0.72 0.12 250));
+}
+
+.polar-attribute {
+  color: light-dark(oklch(0.40 0.18 25), oklch(0.74 0.15 300));
+}
+
+/* Line highlighting */
+.alto-highlighted {
+  background: light-dark(oklch(0.90 0.04 230 / 0.3), oklch(0.30 0.06 230 / 0.3));
+}

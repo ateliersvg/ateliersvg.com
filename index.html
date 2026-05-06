@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier SVG - The SVG toolkit for PHP</title>
+    <meta name="description" content="A PHP library for SVG parsing, manipulation, optimization, and morphing.">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta property="og:description" content="A PHP library for SVG parsing, manipulation, optimization, and morphing.">
+    <meta property="og:url" content="https://ateliersvg.com/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:description" content="A PHP library for SVG parsing, manipulation, optimization, and morphing.">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Atelier SVG",
+  "description": "The SVG toolkit for PHP.",
+  "url": "https://ateliersvg.com/",
+  "codeRepository": "https://github.com/ateliersvg/svg",
+  "installUrl": "https://packagist.org/packages/atelier/svg",
+  "programmingLanguage": "PHP",
+  "runtimePlatform": "PHP 8.3+",
+  "license": "https://opensource.org/licenses/MIT",
+  "author": {
+    "@type": "Person",
+    "name": "Simon André",
+    "url": "https://smnandre.dev",
+    "sameAs": [
+      "https://smnandre.dev",
+      "https://github.com/smnandre"
+    ]
+  }
+}
+</script>
+<link rel="stylesheet" href="/assets/home.css">
+<style>
+  .sidebar { display: none !important; }
+  .page-body { display: block !important; }
+
+  /* ── Hero animation stage ─────────────────────────────────────────────── */
+  /*
+     6 triplets: line → top-circle → bottom-circle, 0.25s between triplets
+     Within each triplet offsets: +0s / +0.35s / +0.75s
+     Lifetimes: line=3s  circles=1s  |  Logo: 3s  |  No loop
+  */
+  .hero-anim-stage {
+    display: block;
+    max-width:  clamp(140px, 28vw, 220px);
+    max-height: clamp(140px, 28vw, 220px);
+  }
+
+  /* Feature words scattered randomly across the hero background.
+     JS drives the lifecycle: each word fades in, lingers, fades out,
+     repositions elsewhere, and repeats - independently. */
+  .hero-words-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-words-bg span {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    white-space: nowrap;
+    opacity: 0;
+    transform-origin: center center;
+    will-change: opacity, filter, transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-words-bg { display: none; }
+  }
+  @media (max-height: 720px) and (max-width: 52rem) {
+    .hero-anim-stage {
+      max-width:  clamp(120px, 32vh, 170px);
+      max-height: clamp(120px, 32vh, 170px);
+    }
+  }
+  .hero-anim-stage svg { width: 100%; height: 100%; overflow: visible; }
+
+  /* Per-element vars - override via inline style on each element */
+  .gc {
+    fill: none;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    --rot-dur:   20s;
+    --gin:       0s;
+    --gout:      1s;
+    --shift-dur: 1s;
+  }
+
+  /* cw / ccw: color-shift handles both reveal and color, g-out handles exit */
+  .cw {
+    animation-name:            rot-cw,         color-shift,      g-out;
+    animation-duration:        var(--rot-dur), var(--shift-dur), 0.5s;
+    animation-timing-function: linear,         ease-in-out,      ease-in;
+    animation-iteration-count: infinite,       1,                1;
+    animation-delay:           0s,             var(--gin),       var(--gout);
+    animation-fill-mode:       none,           both,             forwards;
+  }
+  .ccw {
+    animation-name:            rot-ccw,        color-shift,      g-out;
+    animation-duration:        var(--rot-dur), var(--shift-dur), 0.5s;
+    animation-timing-function: linear,         ease-in-out,      ease-in;
+    animation-iteration-count: infinite,       1,                1;
+    animation-delay:           0s,             var(--gin),       var(--gout);
+    animation-fill-mode:       none,           both,             forwards;
+  }
+
+  /* Lines - color-shift handles reveal, g-out handles exit */
+  .gl {
+    fill: none;
+    stroke-linecap: round;
+    opacity: 0;
+    --gin:       0s;
+    --gout:      3s;
+    --shift-dur: 3s;
+    animation-name:            color-shift,      g-out;
+    animation-duration:        var(--shift-dur), 0.5s;
+    animation-timing-function: ease-in-out,      ease-in;
+    animation-iteration-count: 1,                1;
+    animation-delay:           var(--gin),       var(--gout);
+    animation-fill-mode:       both,             forwards;
+  }
+
+  /*
+     Schematic: dashed stroke revealed by an SVG mask.
+     The mask path sweeps a solid stroke from 0→path_length over 5s.
+     The schematic has a static dash pattern - only the mask-revealed portion is visible.
+  */
+  .logo-schematic {
+    fill: none;
+    stroke: var(--anim-schematic);
+    stroke-width: 5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-dasharray: 50 20;
+    mask: url(#schematic-mask);
+    animation-name:            g-out;
+    animation-duration:        0.8s;
+    animation-timing-function: ease-in;
+    animation-iteration-count: 1;
+    animation-delay:           4s;
+    animation-fill-mode:       forwards;
+  }
+
+  /* Mask reveal path - dasharray must be ≥ path length (~5000 in 1024-space) */
+  .schematic-mask-path {
+    stroke-dasharray: 5500;
+    stroke-dashoffset: 5500;
+    animation-name:            logo-draw;
+    animation-duration:        4.4s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    animation-delay:           1.25s;
+    animation-fill-mode:       forwards;
+  }
+
+  /* Final logo - starts fading in at 4.0s */
+  .logo-final {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation-name:            g-in,     logo-scale;
+    animation-duration:        1.5s,     0.5s;
+    animation-timing-function: ease-out, ease-in-out;
+    animation-delay:           2.25s,    2.6s;
+    animation-fill-mode:       forwards, forwards;
+  }
+  .final-grad-s { fill: none; stroke: url(#logo-grad); stroke-width: 8; stroke-linejoin: round; stroke-linecap: round; }
+
+  @keyframes g-in        { to { opacity: 1 } }
+  @keyframes g-out       { to { opacity: 0 } }
+  @keyframes logo-draw   { to { stroke-dashoffset: 0 } }
+  /* Animation palette - overridden per colour scheme */
+  :root {
+    --anim-c0:   white;
+    --anim-c1:   oklch(0.65 0.22 248);
+    --anim-c2:   oklch(0.54 0.20 292);
+    --anim-cend: oklch(0.1 0 0);
+    --anim-schematic: oklch(0.62 0 0);
+  }
+  html.light {
+    --anim-c0:   oklch(0.75 0.12 55);
+    --anim-c1:   oklch(0.55 0.20 38);
+    --anim-c2:   oklch(0.40 0.16 50);
+    --anim-cend: oklch(0.20 0.04 55);
+    --anim-schematic: oklch(0.55 0.12 48);
+  }
+
+  @keyframes color-shift {
+    0%   { stroke: var(--anim-c0);   opacity: 0;   }
+    15%  { stroke: var(--anim-c0);   opacity: 0.8; }
+    45%  { stroke: var(--anim-c1);   opacity: 0.7; }
+    75%  { stroke: var(--anim-c2);   opacity: 0.5; }
+    100% { stroke: var(--anim-cend); opacity: 0.2; }
+  }
+  @keyframes rot-cw      { to { transform: rotate(360deg)  } }
+  @keyframes rot-ccw     { to { transform: rotate(-360deg) } }
+  @keyframes logo-scale  { from { transform: scale(1) } to { transform: scale(1.01) } }
+
+  /* Skip the heavy hero intro for reduced-motion users AND for visitors who
+     already saw it within the last hour (set by the script below). Both jump
+     straight to the final logo state. */
+  @media (prefers-reduced-motion: reduce) {
+    .gc, .gl, .logo-schematic { animation: none; opacity: 0; }
+    .schematic-mask-path { animation: none; stroke-dashoffset: 0; }
+    .logo-final { animation: none; opacity: 1; }
+  }
+  html.has-seen-hero .gc,
+  html.has-seen-hero .gl,
+  html.has-seen-hero .logo-schematic { animation: none; opacity: 0; }
+  html.has-seen-hero .schematic-mask-path { animation: none; stroke-dashoffset: 0; }
+  html.has-seen-hero .logo-final { animation: none; opacity: 1; }
+</style>
+<script>
+  document.documentElement.classList.add('has-snap-landing');
+  // Skip the hero intro if the visitor saw it within the last hour.
+  (function () {
+    try {
+      var key = 'atelier-svg.heroSeenAt';
+      var last = parseInt(localStorage.getItem(key) || '0', 10);
+      if (Date.now() - last < 3600000) {
+        document.documentElement.classList.add('has-seen-hero');
+      } else {
+        localStorage.setItem(key, String(Date.now()));
+      }
+    } catch (e) { /* localStorage disabled — fall through to the animation */ }
+  }());
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="landing" id="main-content" tabindex="-1">
+
+        <section class="snap-section snap-section--hero" id="hero">
+        <a href="/installation/" class="site-start-link">Getting started</a>
+
+        <div class="landing-hero-inner">
+            <div class="hero-anim-wrap">
+            <div class="hero-anim-stage" id="hero-anim" aria-hidden="true">
+              <svg viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+                    <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+                  </linearGradient>
+                  <clipPath id="diag-clip">
+                    <circle cx="512" cy="512" r="476"/>
+                  </clipPath>
+                  <mask id="schematic-mask">
+                    <rect width="1024" height="1024" fill="black"/>
+                    <path class="schematic-mask-path" fill="none" stroke="white" stroke-width="16"
+                          stroke-linecap="round" stroke-linejoin="round"
+                          fill-rule="evenodd" clip-rule="evenodd"
+                          d="M272 367 413 18c-114 24-162 97-174 198-8 60 8 115 33 151m132 138c-43-32-102-94-132-138L109 758l-35 33 15 15-89 218h208l46-122q32 12 67 21l-32 101h210c119-9 214-48 276-109l41 109h208L614 24Q673 9 746 9H607l7 15q-105 26-163 95c-56 68-69 144-34 203q14 24 36 45zm0 0c46 29 141 71 141 71s81 41 75 106c-6 76-73 101-195 97q-61-3-117-24zm49-138 59-159 91 243q-97-34-150-84m150 84 17 6q235 82 235 267-2 115-80 191zM308 755q-64-25-117-73l-82 76-20 48q71 61 165 96zM413 18l4-18h91c-35 0-66 12-95 18"/>
+                  </mask>
+                </defs>
+
+                                <line class="gl" style="--gin:0s;    --gout:3s"    x1="512" y1="-240" x2="0"    y2="1024" stroke-width="1"/>
+                <line class="gl" style="--gin:0.25s; --gout:3.25s" x1="512" y1="-240" x2="1024" y2="1024" stroke-width="1"/>
+                <line class="gl" style="--gin:0.5s;  --gout:3.5s"  x1="512" y1="200"  x2="164"  y2="1140" stroke-width=".85" clip-path="url(#diag-clip)"/>
+                <line class="gl" style="--gin:0.75s; --gout:3.75s" x1="512" y1="212"  x2="850"  y2="1140" stroke-width=".85" clip-path="url(#diag-clip)"/>
+                <line class="gl" style="--gin:1s;    --gout:4s"    x1="0"   y1="1024" x2="1024" y2="1024" stroke-width=".8"/>
+                <line class="gl" style="--gin:1.25s; --gout:4.25s" x1="0"   y1="0"    x2="1024" y2="0"    stroke-width=".8"/>
+
+                
+                                <circle class="gc ccw" style="--rot-dur:14s;  --gin:0.00s; --gout:2.00s; --shift-dur:2.0s" cx="600" cy="300" r="310" stroke-width="1"    stroke-dasharray="60 22"/>
+                                <circle class="gc cw"  style="--rot-dur:18s;  --gin:1.00s; --gout:3.00s; --shift-dur:2.0s" cx="500" cy="750" r="280" stroke-width="1"    stroke-dasharray="50 18"/>
+                                <circle class="gc ccw" style="--rot-dur:20s;  --gin:0.65s; --gout:2.65s; --shift-dur:2.0s" cx="500" cy="300" r="280" stroke-width=".9"   stroke-dasharray="55 20"/>
+                                <circle class="gc cw"  style="--rot-dur:24s;  --gin:1.65s; --gout:3.65s; --shift-dur:2.0s" cx="580" cy="750" r="280" stroke-width=".9"   stroke-dasharray="45 20"/>
+                                <circle class="gc cw"  style="--rot-dur:42s;  --gin:1.25s; --gout:3.25s; --shift-dur:2.0s" cx="512" cy="212" r="160" stroke-width=".75"  stroke-dasharray="40 16"/>
+                                <circle class="gc cw"  style="--rot-dur:75s;  --gin:2.25s; --gout:4.25s; --shift-dur:2.0s" cx="512" cy="674" r="100" stroke-width=".75"  stroke-dasharray="28 12"/>
+                                <circle class="gc ccw" style="--rot-dur:35s;  --gin:1.90s; --gout:3.90s; --shift-dur:2.0s" cx="580" cy="240" r="180" stroke-width=".75"  stroke-dasharray="35 14"/>
+                                <circle class="gc ccw" style="--rot-dur:14s;  --gin:2.90s; --gout:4.90s; --shift-dur:2.0s" cx="512" cy="700" r="324" stroke-width=".9"   stroke-dasharray="55 22"/>
+                                <circle class="gc cw"  style="--rot-dur:60s;  --gin:2.50s; --gout:4.50s; --shift-dur:2.0s" cx="512" cy="512" r="476" stroke-width="1.1"  stroke-dasharray="90 28"/>
+                                <circle class="gc cw"  style="--rot-dur:24s;  --gin:3.50s; --gout:5.50s; --shift-dur:2.0s" cx="578" cy="734" r="270" stroke-width=".8"   stroke-dasharray="48 18"/>
+                                <circle class="gc ccw" style="--rot-dur:80s;  --gin:0.35s; --gout:2.5s; --shift-dur:2.15s" cx="512" cy="512" r="596" stroke-width="1"    stroke-dasharray="40 80"/>
+                                <circle class="gc cw"  style="--rot-dur:120s; --gin:0s;    --gout:3.75s; --shift-dur:3.75s" cx="512" cy="512" r="730" stroke-width=".8"   stroke-dasharray="40 10 5 10"/>
+
+                                <path class="logo-schematic" fill-rule="evenodd" clip-rule="evenodd"
+                      d="M272 367 413 18c-114 24-162 97-174 198-8 60 8 115 33 151m132 138c-43-32-102-94-132-138L109 758l-35 33 15 15-89 218h208l46-122q32 12 67 21l-32 101h210c119-9 214-48 276-109l41 109h208L614 24Q673 9 746 9H607l7 15q-105 26-163 95c-56 68-69 144-34 203q14 24 36 45zm0 0c46 29 141 71 141 71s81 41 75 106c-6 76-73 101-195 97q-61-3-117-24zm49-138 59-159 91 243q-97-34-150-84m150 84 17 6q235 82 235 267-2 115-80 191zM308 755q-64-25-117-73l-82 76-20 48q71 61 165 96zM413 18l4-18h91c-35 0-66 12-95 18"/>
+
+                                <path class="logo-final final-grad-s" fill-rule="evenodd" clip-rule="evenodd"
+                      d="M272 367 413 18c-114 24-162 97-174 198-8 60 8 115 33 151m132 138c-43-32-102-94-132-138L109 758l-35 33 15 15-89 218h208l46-122q32 12 67 21l-32 101h210c119-9 214-48 276-109l41 109h208L614 24Q673 9 746 9H607l7 15q-105 26-163 95c-56 68-69 144-34 203q14 24 36 45zm0 0c46 29 141 71 141 71s81 41 75 106c-6 76-73 101-195 97q-61-3-117-24zm49-138 59-159 91 243q-97-34-150-84m150 84 17 6q235 82 235 267-2 115-80 191zM308 755q-64-25-117-73l-82 76-20 48q71 61 165 96zM413 18l4-18h91c-35 0-66 12-95 18"/>
+              </svg>
+            </div>
+            </div>            <h1 class="landing-title"><span class="landing-title-atelier">Atelier</span> <span class="landing-title-svg">SVG</span></h1>
+            <p class="landing-hero-sub">SVG Toolkit for PHP</p>
+        </div>
+
+        <div class="hero-words-bg" aria-hidden="true">
+            <span>PARSE</span><span>BUILD</span><span>EXPORT</span><span>RENDER</span>
+            <span>TRANSFORM</span><span>OPTIMIZE</span><span>MORPH</span><span>ANIMATE</span>
+            <span>SANITIZE</span><span>VALIDATE</span><span>COMPOSE</span><span>INTERPOLATE</span>
+            <span>SHAPES</span><span>PATHS</span><span>FILTERS</span><span>GRADIENTS</span>
+            <span>SYMBOLS</span><span>MASKS</span><span>CLIP-PATHS</span><span>GROUPS</span>
+            <span>GEOMETRY</span><span>STYLING</span><span>BOUNDING-BOX</span><span>VIEWBOX</span>
+            <span>MATRIX</span><span>ROTATE</span><span>SCALE</span><span>TRANSLATE</span>
+        </div>
+
+        <dl class="hero-stats" aria-label="At a glance">
+            <div class="hero-stat"><dt>Runtime</dt><dd>PHP 8.3+</dd></div>
+            <div class="hero-stat"><dt>Dependencies</dt><dd>None</dd></div>
+            <div class="hero-stat"><dt>Tests</dt><dd>4 000+</dd></div>
+            <div class="hero-stat"><dt>Coverage</dt><dd>100%</dd></div>
+            <div class="hero-stat"><dt>PHPStan</dt><dd>Level 10</dd></div>
+            <div class="hero-stat"><dt>Standard</dt><dd>SVG 1.1</dd></div>
+        </dl>
+
+        <div class="hero-ctas">
+            <a href="#docs" class="hero-cta hero-cta--discover" data-scroll-to>
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3 L11 8 L5 13"/></svg>
+                Discover
+            </a>
+            <a href="https://github.com/ateliersvg/svg" class="hero-cta hero-cta--github" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </section>
+
+        <section class="snap-section landing-section landing-section--alt" id="docs">
+        <div class="landing-section-inner">
+            <h2 class="landing-section-title">Everything SVG, in PHP</h2>
+            <div class="landing-grid">
+                <div class="landing-card">
+                    <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <rect x="30" y="18" width="52" height="64" rx="4" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="40" y1="32" x2="72" y2="32" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="40" y1="42" x2="68" y2="42" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="40" y1="52" x2="60" y2="52" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <rect x="120" y="22" width="70" height="56" rx="5" stroke="#3e3e4c" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="132" y="32" width="22" height="16" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="172" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <line x1="132" y1="60" x2="178" y2="60" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <rect x="230" y="15" width="80" height="70" rx="5" stroke="#3e3e4c" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="242" y="25" width="56" height="28" rx="3" stroke="#50505e" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <circle cx="260" cy="39" r="6" stroke="#b8b8c6" stroke-width="1.2"/>
+  <rect x="282" y="33" width="10" height="10" rx="1.5" stroke="#888898" stroke-width="1"/>
+  <line x1="242" y1="65" x2="298" y2="65" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="242" y1="72" x2="280" y2="72" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <rect x="345" y="20" width="40" height="60" rx="3" stroke="#b0b0be" stroke-width="1"/>
+  <line x1="354" y1="34" x2="376" y2="34" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="354" y1="42" x2="372" y2="42" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <circle cx="365" cy="60" r="5" stroke="#888898" stroke-width="0.8"/>
+</svg>
+</div>
+</div>                    <div class="landing-card-body"><h3><a href="/document/">Document</a></h3><p>Parse existing files, create from scratch, validate structure, sanitize uploads</p></div>
+                </div>
+                <div class="landing-card">
+                    <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <rect x="25" y="30" width="40" height="40" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="120" cy="50" r="22" stroke="#b0b0be" stroke-width="1.3"/>
+  <path d="M200,28 L218,72 L182,72 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <ellipse cx="280" cy="50" rx="28" ry="18" stroke="#b0b0be" stroke-width="1.2"/>
+  <line x1="340" y1="28" x2="380" y2="72" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="340" cy="28" r="3" fill="#18181f" stroke="#888898" stroke-width="1"/>
+  <circle cx="380" cy="72" r="3" fill="#18181f" stroke="#888898" stroke-width="1"/>
+</svg>
+</div>
+</div>                    <div class="landing-card-body"><h3><a href="/elements/">Elements</a></h3><p>Every SVG element as a typed object. Query with CSS selectors, traverse the tree</p></div>
+                </div>
+                <div class="landing-card">
+                    <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <path d="M 30,75 C 80,75 100,20 160,20 S 240,80 300,50 S 360,20 380,25" stroke="#b8b8c6" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="30" y1="75" x2="80" y2="75" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2"/>
+  <line x1="100" y1="20" x2="160" y2="20" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2"/>
+  <line x1="240" y1="80" x2="300" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2"/>
+  <circle cx="30" cy="75" r="3.5" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="160" cy="20" r="3.5" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="300" cy="50" r="3.5" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="380" cy="25" r="3.5" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="80" cy="75" r="2.5" fill="#18181f" stroke="#888898" stroke-width="1"/>
+  <circle cx="100" cy="20" r="2.5" fill="#18181f" stroke="#888898" stroke-width="1"/>
+  <circle cx="240" cy="80" r="2.5" fill="#18181f" stroke="#888898" stroke-width="1"/>
+</svg>
+</div>
+</div>                    <div class="landing-card-body"><h3><a href="/path/">Paths</a></h3><p>Build curves, compute geometry, simplify segments, boolean operations</p></div>
+                </div>
+                <div class="landing-card">
+                    <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <rect x="30" y="25" width="50" height="50" rx="4" stroke="#b8b8c6" stroke-width="0.8"/>
+  <rect x="100" y="25" width="50" height="50" rx="4" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="170" y="25" width="50" height="50" rx="4" stroke="#b8b8c6" stroke-width="2.5"/>
+  <circle cx="275" cy="50" r="22" stroke="#b0b0be" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <circle cx="275" cy="50" r="15" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="330" y1="30" x2="330" y2="70" stroke="#888898" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="350" y1="25" x2="350" y2="75" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="370" y1="35" x2="370" y2="65" stroke="#b8b8c6" stroke-width="1.8" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                    <div class="landing-card-body"><h3><a href="/styling/">Styling</a></h3><p>Read and write inline styles, compute transforms, resolve layout</p></div>
+                </div>
+                <div class="landing-card">
+                    <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <path d="M30,70 L50,25 L65,55 L80,20 L95,60 L110,30 L125,65 L140,35 L155,70" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="30" cy="70" r="2" fill="#888898"/>
+  <circle cx="80" cy="20" r="2" fill="#888898"/>
+  <circle cx="155" cy="70" r="2" fill="#888898"/>
+  <line x1="180" y1="50" x2="220" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <path d="M216,46 L222,50 L216,54" stroke="#888898" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M250,65 L290,25 L330,50 L370,35" stroke="#b8b8c6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="250" cy="65" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="290" cy="25" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="330" cy="50" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="370" cy="35" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.2"/>
+</svg>
+</div>
+</div>                    <div class="landing-card-body"><h3><a href="/optimization/">Optimization</a></h3><p>40+ passes that clean, shrink, and simplify. Custom pipelines, batch processing</p></div>
+                </div>
+                <div class="landing-card">
+                    <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <rect x="25" y="30" width="40" height="40" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="110" y="28" width="40" height="40" rx="8" stroke="#b0b0be" stroke-width="1.2" opacity="0.6"/>
+  <rect x="195" y="26" width="40" height="40" rx="15" stroke="#b0b0be" stroke-width="1.2" opacity="0.7"/>
+  <circle cx="300" cy="48" r="20" stroke="#b0b0be" stroke-width="1.2" opacity="0.8"/>
+  <circle cx="370" cy="48" r="20" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="70" y1="50" x2="340" y2="50" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="4 3"/>
+  <circle cx="45" cy="50" r="2" fill="#888898"/>
+  <circle cx="130" cy="48" r="2" fill="#888898" opacity="0.6"/>
+  <circle cx="215" cy="46" r="2" fill="#888898" opacity="0.7"/>
+  <circle cx="300" cy="48" r="2" fill="#888898" opacity="0.8"/>
+  <circle cx="370" cy="48" r="2" fill="#888898"/>
+</svg>
+</div>
+</div>                    <div class="landing-card-body"><h3><a href="/morphing/">Morphing</a></h3><p>Interpolate between any two shapes. Export as SMIL, CSS, JS, or sprite sheets</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <section class="snap-section landing-section" id="guides">
+        <div class="landing-section-inner">
+            <h2 class="landing-section-title">Guides & Use Cases</h2>
+            <p class="landing-section-intro">Step-by-step recipes for the most common SVG workflows in PHP.</p>
+            <div class="landing-grid">
+                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Dangerous input shapes, left -->
+  <path d="M30,65 L42,30 L50,55 L62,22 L70,50 L82,28" stroke="#6a6a7a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="95" y="35" width="20" height="25" rx="2" stroke="#6a6a7a" stroke-width="0.8"/>
+  <line x1="100" y1="42" x2="110" y2="42" stroke="#6a6a7a" stroke-width="0.5"/>
+  <circle cx="130" cy="48" r="10" stroke="#6a6a7a" stroke-width="0.8"/>
+  <!-- Shield / filter gate -->
+  <path d="M185,20 L210,28 L210,62 L185,78 L160,62 L160,28 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <polyline points="175,50 183,58 198,42" stroke="#888898" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Clean output shapes, right -->
+  <rect x="250" y="32" width="28" height="28" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="320" cy="46" r="14" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="320" cy="46" r="2" fill="#888898"/>
+  <line x1="360" y1="30" x2="380" y2="62" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <circle cx="360" cy="30" r="2.5" fill="#18181f" stroke="#888898" stroke-width="0.8"/>
+  <circle cx="380" cy="62" r="2.5" fill="#18181f" stroke="#888898" stroke-width="0.8"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/sanitize-uploads/">Sanitize Uploads</a></h3><p>Accept SVGs from users without risking XSS. Strip scripts, event handlers, and dangerous content, then validate and optimize before serving.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: 3 overlapping document rects -->
+  <rect x="38" y="28" width="50" height="50" rx="3" stroke="#6a6a7a" stroke-width="0.8"/>
+  <rect x="48" y="22" width="50" height="50" rx="3" stroke="#b0b0be" stroke-width="1"/>
+  <rect x="58" y="16" width="50" height="50" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- Content lines in top doc -->
+  <line x1="66" y1="28" x2="100" y2="28" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="66" y1="36" x2="96" y2="36" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="66" y1="44" x2="92" y2="44" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <!-- Arrow -->
+  <line x1="130" y1="45" x2="240" y2="45" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="234,39 244,45 234,51" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Processing dots -->
+  <circle cx="165" cy="45" r="1.5" fill="#888898"/>
+  <circle cx="190" cy="45" r="2" fill="#888898"/>
+  <circle cx="215" cy="45" r="1.5" fill="#888898"/>
+  <!-- Right: 3 compressed/thinner docs -->
+  <rect x="268" y="34" width="38" height="36" rx="2" stroke="#6a6a7a" stroke-width="0.6"/>
+  <rect x="278" y="28" width="38" height="36" rx="2" stroke="#b0b0be" stroke-width="0.8"/>
+  <rect x="288" y="22" width="38" height="36" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <!-- Thin content lines in compressed -->
+  <line x1="294" y1="32" x2="320" y2="32" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="294" y1="38" x2="316" y2="38" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <!-- Size indicator -->
+  <line x1="348" y1="22" x2="348" y2="58" stroke="#888898" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="345" y1="22" x2="351" y2="22" stroke="#888898" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="345" y1="58" x2="351" y2="58" stroke="#888898" stroke-width="0.6" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/batch-optimize/">Batch Optimize</a></h3><p>Optimize an entire directory of SVG files in a build step or CI pipeline using configurable optimization passes.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Outer group bracket -->
+  <rect x="25" y="12" width="350" height="76" rx="4" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <!-- Group A (left) -->
+  <rect x="40" y="24" width="140" height="52" rx="3" stroke="#b0b0be" stroke-width="1" stroke-dasharray="4 2"/>
+  <!-- Elements in group A -->
+  <rect x="55" y="34" width="28" height="28" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="55" cy="34" r="1.5" fill="#888898"/>
+  <circle cx="115" cy="48" r="15" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="115" cy="48" r="2" fill="#18181f"/>
+  <!-- Transform arrow on group A -->
+  <path d="M50,20 Q90,8 130,20" stroke="#888898" stroke-width="0.6" stroke-dasharray="2 2" stroke-linecap="round"/>
+  <polyline points="126,16 132,20 126,24" stroke="#888898" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Group B (right) -->
+  <rect x="200" y="24" width="160" height="52" rx="3" stroke="#b0b0be" stroke-width="1" stroke-dasharray="4 2"/>
+  <!-- Elements in group B -->
+  <polygon points="230,36 244,64 216,64" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <line x1="270" y1="35" x2="270" y2="65" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="270" cy="35" r="2" fill="#888898"/>
+  <circle cx="270" cy="65" r="2" fill="#888898"/>
+  <!-- Nested sub-group inside B -->
+  <rect x="290" y="32" width="58" height="36" rx="2" stroke="#6a6a7a" stroke-width="0.6" stroke-dasharray="3 2"/>
+  <rect x="302" y="40" width="14" height="14" rx="1" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="338" cy="50" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="338" cy="50" r="1.5" fill="#888898"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/working-with-groups/">Working with Groups</a></h3><p>Use groups to scope transforms, share attributes, and structure complex SVG documents.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Bar chart baseline -->
+  <line x1="40" y1="75" x2="240" y2="75" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <!-- Y axis -->
+  <line x1="40" y1="20" x2="40" y2="75" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <!-- 5 bars of varying heights -->
+  <rect x="55" y="50" width="22" height="25" rx="1" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="85" y="28" width="22" height="47" rx="1" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="115" y="42" width="22" height="33" rx="1" stroke="#b0b0be" stroke-width="1.2"/>
+  <rect x="145" y="22" width="22" height="53" rx="1" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="175" y="55" width="22" height="20" rx="1" stroke="#b0b0be" stroke-width="1"/>
+  <!-- Bar top dots -->
+  <circle cx="66" cy="50" r="1.5" fill="#888898"/>
+  <circle cx="96" cy="28" r="1.5" fill="#888898"/>
+  <circle cx="126" cy="42" r="1.5" fill="#888898"/>
+  <circle cx="156" cy="22" r="1.5" fill="#888898"/>
+  <circle cx="186" cy="55" r="1.5" fill="#888898"/>
+  <!-- Right: pie chart -->
+  <circle cx="310" cy="48" r="26" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="310" y1="48" x2="310" y2="22" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="310" y1="48" x2="334" y2="56" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="310" y1="48" x2="290" y2="66" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Pie center dot -->
+  <circle cx="310" cy="48" r="2" fill="#888898"/>
+  <!-- Connecting dashes -->
+  <line x1="210" y1="50" x2="278" y2="50" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/build-charts/">Build Charts</a></h3><p>Generate SVG charts and data visualizations programmatically in PHP. Compose bar charts, add accessible metadata, and combine layouts.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: grid with icon -->
+  <rect x="30" y="22" width="56" height="56" rx="2" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <!-- Grid lines -->
+  <line x1="30" y1="36" x2="86" y2="36" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="30" y1="50" x2="86" y2="50" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="30" y1="64" x2="86" y2="64" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="44" y1="22" x2="44" y2="78" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="58" y1="22" x2="58" y2="78" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="72" y1="22" x2="72" y2="78" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <!-- House icon on grid -->
+  <path d="M46,62 L46,48 L58,36 L70,48 L70,62 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="55" y="52" width="8" height="10" rx="1" stroke="#b0b0be" stroke-width="1"/>
+  <!-- Dashed connector -->
+  <line x1="100" y1="50" x2="145" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Center: currentColor swatch concept -->
+  <circle cx="175" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="175" cy="40" r="3" fill="#888898"/>
+  <circle cx="200" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="200" cy="40" r="3" fill="#6a6a7a"/>
+  <circle cx="225" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="225" cy="40" r="3" fill="#18181f"/>
+  <!-- Label line below -->
+  <line x1="170" y1="58" x2="230" y2="58" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="178" y1="64" x2="222" y2="64" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <!-- Dashed connector -->
+  <line x1="245" y1="50" x2="285" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Right: scaled icon instances -->
+  <path d="M302,58 L302,48 L310,40 L318,48 L318,58 Z" stroke="#b8b8c6" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M338,64 L338,46 L352,32 L366,46 L366,64 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="348" y="52" width="8" height="12" rx="1" stroke="#b0b0be" stroke-width="0.8"/>
+  <!-- Scale arrows -->
+  <line x1="296" y1="68" x2="324" y2="68" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="332" y1="72" x2="372" y2="72" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/creating-icons/">Creating Icons</a></h3><p>Build accessible, optimized SVG icons - viewBox setup, currentColor, accessibility annotations, and production export.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Sprite sheet container -->
+  <rect x="25" y="15" width="350" height="70" rx="4" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <!-- Dividers -->
+  <line x1="112" y1="20" x2="112" y2="80" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="200" y1="20" x2="200" y2="80" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="288" y1="20" x2="288" y2="80" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <!-- Icon 1: star -->
+  <path d="M68,34 L72,46 L84,46 L74,54 L78,66 L68,58 L58,66 L62,54 L52,46 L64,46 Z" stroke="#b8b8c6" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Icon 2: circle -->
+  <circle cx="156" cy="50" r="16" stroke="#b0b0be" stroke-width="1.2"/>
+  <circle cx="156" cy="50" r="2" fill="#888898"/>
+  <!-- Icon 3: rect -->
+  <rect x="228" y="34" width="30" height="30" rx="3" stroke="#b8b8c6" stroke-width="1.2"/>
+  <!-- Icon 4: triangle (selected) -->
+  <rect x="296" y="28" width="52" height="44" rx="2" stroke="#888898" stroke-width="1" stroke-dasharray="3 2"/>
+  <path d="M310,64 L322,36 L334,64 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/sprites-and-symbols/">Sprite Sheets</a></h3><p>Combine multiple SVG icons into a single sprite using &lt;symbol&gt; and &lt;use&gt; to reduce HTTP requests and keep icons consistent across your app.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Square at left -->
+  <rect x="25" y="32" width="36" height="36" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="43" cy="50" r="2" fill="#18181f"/>
+  <!-- Curved arrow path between -->
+  <path d="M70,40 Q140,15 200,40 Q260,65 330,35" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <!-- Ghost shape 1: rounded square fading -->
+  <rect x="122" y="30" width="34" height="34" rx="8" stroke="#b0b0be" stroke-width="1" opacity="0.4"/>
+  <circle cx="139" cy="47" r="1.5" fill="#888898" opacity="0.4"/>
+  <!-- Ghost shape 2: more circular -->
+  <rect x="223" y="32" width="32" height="32" rx="14" stroke="#b0b0be" stroke-width="1" opacity="0.6"/>
+  <circle cx="239" cy="48" r="1.5" fill="#888898" opacity="0.6"/>
+  <!-- Circle at right -->
+  <circle cx="365" cy="48" r="18" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="365" cy="48" r="2" fill="#18181f"/>
+  <!-- Motion trail dots along path -->
+  <circle cx="90" cy="30" r="1.5" fill="#888898" opacity="0.3"/>
+  <circle cx="170" cy="28" r="1.5" fill="#888898" opacity="0.4"/>
+  <circle cx="280" cy="42" r="1.5" fill="#888898" opacity="0.5"/>
+  <!-- Timeline below -->
+  <line x1="30" y1="82" x2="375" y2="82" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <circle cx="43" cy="82" r="1.5" fill="#888898"/>
+  <circle cx="365" cy="82" r="1.5" fill="#888898"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/animate-shapes/">Animate Shapes</a></h3><p>Morph between two SVG shapes and export self-contained animated SVGs with configurable easing, frame count, and timing.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: Magnifying glass (Inspection/Audit) -->
+  <circle cx="75" cy="45" r="18" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="88" y1="58" x2="110" y2="80" stroke="#b8b8c6" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Inner lens highlight -->
+  <circle cx="75" cy="45" r="10" stroke="#b0b0be" stroke-width="0.8" stroke-dasharray="2 2"/>
+  <circle cx="110" cy="80" r="2.5" fill="#888898"/>
+  
+  <!-- Dashed connector -->
+  <line x1="130" y1="50" x2="170" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  
+  <!-- Center: Semantic Label / ARIA tag -->
+  <path d="M190,40 L255,40 L265,50 L255,60 L190,60 Z" stroke="#b0b0be" stroke-width="1.2"/>
+  <line x1="202" y1="50" x2="242" y2="50" stroke="#b0b0be" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="198" cy="50" r="1.5" fill="#888898"/>
+  
+  <!-- Dashed connector -->
+  <line x1="285" y1="50" x2="315" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  
+  <!-- Right: Checkmark (Validation) -->
+  <polyline points="335,52 350,65 380,30" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Subtle arc support -->
+  <path d="M320,75 Q352,85 385,75" stroke="#6a6a7a" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/accessibility/">Accessibility</a></h3><p>Audit and fix SVG accessibility: add titles, descriptions, and ARIA roles so SVGs work correctly with screen readers and assistive technology.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Doc 1 (top-left) -->
+  <rect x="30" y="14" width="40" height="30" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <line x1="36" y1="22" x2="64" y2="22" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="36" y1="28" x2="58" y2="28" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="36" y1="34" x2="60" y2="34" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <!-- Doc 2 (bottom-left) -->
+  <rect x="30" y="56" width="40" height="30" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="50" cy="68" r="7" stroke="#6a6a7a" stroke-width="0.6"/>
+  <circle cx="50" cy="68" r="2" fill="#6a6a7a"/>
+  <!-- Doc 3 (middle-left) -->
+  <rect x="85" y="35" width="40" height="30" rx="2" stroke="#b0b0be" stroke-width="1"/>
+  <path d="M95,52 L100,42 L105,48 L112,40 L118,52" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Converging arrows -->
+  <path d="M72,30 Q120,30 155,48" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <path d="M72,70 Q120,70 155,52" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <path d="M126,50 L155,50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Merge point -->
+  <circle cx="160" cy="50" r="3" fill="#888898"/>
+  <!-- Arrow to result -->
+  <line x1="165" y1="50" x2="215" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="210,44 220,50 210,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Result: merged document -->
+  <rect x="235" y="18" width="65" height="64" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- Combined content inside -->
+  <line x1="244" y1="28" x2="290" y2="28" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="244" y1="34" x2="282" y2="34" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="244" y1="42" x2="290" y2="42" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <circle cx="260" cy="54" r="6" stroke="#6a6a7a" stroke-width="0.5"/>
+  <circle cx="260" cy="54" r="1.5" fill="#6a6a7a"/>
+  <path d="M275,60 L280,52 L285,56 L290,48 L295,60" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Size bracket -->
+  <line x1="316" y1="18" x2="316" y2="82" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="313" y1="18" x2="319" y2="18" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="313" y1="82" x2="319" y2="82" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/merge-documents/">Merge SVG Documents</a></h3><p>Combine multiple SVG documents into one using merge strategies, or import individual elements between documents.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: shapes -->
+  <rect x="28" y="34" width="26" height="26" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="85" cy="47" r="14" stroke="#b8b8c6" stroke-width="1.5"/>
+  <polygon points="130,34 146,66 114,66" stroke="#b0b0be" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Dashed arrow -->
+  <line x1="160" y1="50" x2="230" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="224,44 234,50 224,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Transition dots -->
+  <circle cx="180" cy="50" r="1.5" fill="#888898"/>
+  <circle cx="195" cy="50" r="2" fill="#888898"/>
+  <circle cx="210" cy="50" r="1.5" fill="#888898"/>
+  <!-- Right: same shapes drawn as paths with visible control points -->
+  <!-- Rect as path -->
+  <path d="M258,34 L284,34 L284,60 L258,60 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="258" cy="34" r="1.5" fill="#888898"/>
+  <circle cx="284" cy="34" r="1.5" fill="#888898"/>
+  <circle cx="284" cy="60" r="1.5" fill="#888898"/>
+  <circle cx="258" cy="60" r="1.5" fill="#888898"/>
+  <!-- Circle as path (with control points) -->
+  <path d="M330,33 C338,33 344,39 344,47 C344,55 338,61 330,61 C322,61 316,55 316,47 C316,39 322,33 330,33" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="330" cy="33" r="1.5" fill="#888898"/>
+  <circle cx="344" cy="47" r="1.5" fill="#888898"/>
+  <circle cx="330" cy="61" r="1.5" fill="#888898"/>
+  <circle cx="316" cy="47" r="1.5" fill="#888898"/>
+  <!-- Control point handles on circle -->
+  <line x1="330" y1="33" x2="336" y2="33" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <line x1="344" y1="47" x2="344" y2="41" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <line x1="330" y1="61" x2="324" y2="61" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <line x1="316" y1="47" x2="316" y2="53" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <!-- "d=" label hint -->
+  <line x1="252" y1="72" x2="350" y2="72" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="260" y1="78" x2="340" y2="78" stroke="#6a6a7a" stroke-width="0.3" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/shapes-to-paths/">Convert Shapes to Paths</a></h3><p>Convert SVG shape elements - rect, circle, ellipse, line, polygon, polyline - to path elements for animation, morphing, and further optimization.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Trail curve -->
+  <path d="M40,72 C 110,18 290,18 360,72" stroke="#b0b0be" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Faint baseline -->
+  <line x1="30" y1="92" x2="370" y2="92" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Endpoints (start / finish) emphasised -->
+  <circle cx="40"  cy="72" r="3.6" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="360" cy="72" r="3.6" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- 5 evenly-spaced markers along the curve (positions taken from getPointAtLength) -->
+  <circle cx="86"  cy="46" r="2.6" fill="#888898"/>
+  <circle cx="148" cy="29" r="2.6" fill="#888898"/>
+  <circle cx="200" cy="24" r="2.6" fill="#888898"/>
+  <circle cx="252" cy="29" r="2.6" fill="#888898"/>
+  <circle cx="314" cy="46" r="2.6" fill="#888898"/>
+  <!-- Length tick marks below the curve, suggesting measured spacing -->
+  <line x1="40"  y1="86" x2="40"  y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="120" y1="86" x2="120" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="200" y1="86" x2="200" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="280" y1="86" x2="280" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="360" y1="86" x2="360" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/markers-along-path/">Place Markers Along a Path</a></h3><p>Distribute markers, dots, or labels evenly along an SVG path using the path&#039;s length and getPointAtLength() - useful for trails, route maps, and animation guides.</p></div>
+                        </div>
+                                                                                            <div class="landing-card">
+                                                        <div class="landing-card-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Loose original viewport (left): big dashed frame with content tucked in a corner -->
+  <rect x="40" y="18" width="120" height="64" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" rx="2"/>
+  <!-- Content in the bottom-right of the loose frame -->
+  <rect   x="118" y="56" width="28" height="18" rx="2" stroke="#b0b0be" stroke-width="1.3"/>
+  <circle cx="135" cy="49" r="6"                  stroke="#b0b0be" stroke-width="1.3"/>
+  <circle cx="125" cy="49" r="1.4" fill="#888898"/>
+  <!-- Anchor / corner ticks of the loose frame -->
+  <line x1="40"  y1="18" x2="44"  y2="18" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="40"  y1="18" x2="40"  y2="22" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="160" y1="82" x2="156" y2="82" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="160" y1="82" x2="160" y2="78" stroke="#6a6a7a" stroke-width="0.6"/>
+
+  <!-- Dashed flow arrow -->
+  <line x1="180" y1="50" x2="240" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="234,44 244,50 234,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Tight cropped viewport (right): frame hugging the content -->
+  <rect x="278" y="34" width="78" height="38" stroke="#b8b8c6" stroke-width="1.5" rx="2"/>
+  <rect   x="296" y="50" width="28" height="18" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="313" cy="43" r="6"                  stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="303" cy="43" r="1.4" fill="#888898"/>
+  <!-- Corner ticks on the tight frame -->
+  <line x1="278" y1="34" x2="282" y2="34" stroke="#888898" stroke-width="0.7"/>
+  <line x1="278" y1="34" x2="278" y2="38" stroke="#888898" stroke-width="0.7"/>
+  <line x1="356" y1="72" x2="352" y2="72" stroke="#888898" stroke-width="0.7"/>
+  <line x1="356" y1="72" x2="356" y2="68" stroke="#888898" stroke-width="0.7"/>
+
+  <!-- Faint baseline -->
+  <line x1="30" y1="92" x2="370" y2="92" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+</div>                            <div class="landing-card-body"><h3><a href="/guides/crop-to-content/">Crop SVG to its Content</a></h3><p>Trim an SVG&#039;s viewBox and dimensions to fit its actual content, removing whitespace from third-party files or after deleting elements.</p></div>
+                        </div>
+                                                                        </div>
+        </div>
+    </section>
+
+        <section class="snap-section landing-section" id="community">
+        <div class="landing-section-inner" style="text-align: center;">
+            <h2 class="landing-section-title">Community</h2>
+            <p class="landing-community-intro">
+                Free and MIT licensed.
+                Contributions of all kinds are welcome, from bug reports to pull requests.
+            </p>
+            <div class="landing-community-links">
+                <a href="https://github.com/ateliersvg/svg" class="landing-community-link" rel="noopener noreferrer">
+                    <svg class="landing-bottom-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="5" r="2"/><circle cx="4" cy="15" r="2"/><circle cx="16" cy="15" r="2"/><path d="M10 7v3M10 10 4 13M10 10l6 3"/></svg>
+                    <strong>Contribute</strong>
+                    <span>Open issues, submit PRs</span>
+                </a>
+                <a href="https://github.com/ateliersvg/svg/issues" class="landing-community-link" rel="noopener noreferrer">
+                    <svg class="landing-bottom-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><line x1="10" y1="7" x2="10" y2="10"/><circle cx="10" cy="13" r="0.5" fill="currentColor"/></svg>
+                    <strong>Support</strong>
+                    <span>Report bugs, ask questions</span>
+                </a>
+                <a href="/changelog/" class="landing-community-link">
+                    <svg class="landing-bottom-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="14" height="13" rx="2"/><line x1="3" y1="8" x2="17" y2="8"/><line x1="7" y1="2" x2="7" y2="5"/><line x1="13" y1="2" x2="13" y2="5"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="6" y1="14.5" x2="9" y2="14.5"/></svg>
+                    <strong>Changelog</strong>
+                    <span>Releases &amp; breaking changes</span>
+                </a>
+            </div>
+            <a href="https://github.com/ateliersvg" class="landing-github-cta" rel="noopener noreferrer">
+                github.com/atelier<span class="landing-github-cta-svg">svg</span>
+            </a>
+        </div>
+    </section>
+
+</div>
+
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+
+<script>
+  // Hero background words: each word runs its own infinite lifecycle:
+  // fade in at random position, linger, fade out slowly, reposition, repeat.
+  (() => {
+    const container = document.querySelector('.hero-words-bg');
+    if (!container) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const spans = Array.from(container.querySelectorAll('span'));
+
+    // Central exclusion box (percent of hero) - keeps logo / title / stats / CTAs clear.
+    const ex = { l: 34, r: 66, t: 38, b: 78 };
+    const inExclusion = (x, y) => x > ex.l && x < ex.r && y > ex.t && y < ex.b;
+
+    const reposition = (span) => {
+      let x, y, attempts = 0;
+      do {
+        x = 3 + Math.random() * 94;
+        y = 4 + Math.random() * 88;
+        attempts++;
+      } while (inExclusion(x, y) && attempts < 30);
+      span.style.left = x + '%';
+      span.style.top = y + '%';
+    };
+
+    const cycle = (span) => {
+      reposition(span);
+      const scale = (0.88 + Math.random() * 0.24).toFixed(3);  // 0.88 – 1.12
+      // Tint ~30% of words a subtle blue-purple; rest inherit the muted ink color.
+      const tinted = Math.random() < 0.3;
+      span.style.color = tinted ? 'oklch(0.62 0.16 285)' : '';
+      span.style.transition = 'none';
+      span.style.opacity = '0';
+      span.style.filter = 'blur(0px)';
+      span.style.transform = `scale(${scale})`;
+      // Wait one frame so the browser registers opacity=0 before transitioning.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const fadeIn = 700 + Math.random() * 500;         // 0.7 – 1.2s
+        const visible = 600 + Math.random() * 900;        // 0.6 – 1.5s
+        const fadeOut = 1800 + Math.random() * 1400;      // 1.8 – 3.2s
+        const peakOpacity = (0.14 + Math.random() * 0.14).toFixed(3); // 0.14 – 0.28
+        span.style.transition = `opacity ${fadeIn}ms ease-out, filter ${fadeIn}ms ease-out`;
+        span.style.opacity = peakOpacity;
+        setTimeout(() => {
+          span.style.transition = `opacity ${fadeOut}ms ease-in, filter ${fadeOut}ms ease-in`;
+          span.style.opacity = '0';
+          span.style.filter = 'blur(3px)';
+          setTimeout(() => cycle(span), fadeOut + 200);
+        }, fadeIn + visible);
+      }));
+    };
+
+    // Stagger initial starts so words don't all bloom at once. Start sooner - first wave from 200ms.
+    spans.forEach((span) => {
+      setTimeout(() => cycle(span), 200 + Math.random() * 4000);
+    });
+  })();
+</script>
+</body>
+</html>

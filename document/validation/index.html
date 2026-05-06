@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation - Document - Atelier SVG</title>
+    <meta name="description" content="Atelier SVG provides comprehensive validation to check SVG documents for structural issues, broken references, duplicate IDs, accessibility problems, and spec">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/document/validation/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Validation - Document - Atelier SVG">
+    <meta property="og:description" content="Atelier SVG provides comprehensive validation to check SVG documents for structural issues, broken references, duplicate IDs, accessibility problems, and spec">
+    <meta property="og:url" content="https://ateliersvg.com/document/validation/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Validation - Document - Atelier SVG">
+    <meta name="twitter:description" content="Atelier SVG provides comprehensive validation to check SVG documents for structural issues, broken references, duplicate IDs, accessibility problems, and spec">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SVG",
+      "item": "https://ateliersvg.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Document",
+      "item": "https://ateliersvg.com/document/"
+    },{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Validation",
+      "item": "https://ateliersvg.com/document/validation/"
+    }  ]
+}
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="page-body">
+    <nav class="sidebar" id="sidebar">
+    <a href="/" class="site-brand">
+        <svg class="site-logo" viewBox="0 0 354 363" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+              <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+            </linearGradient>
+          </defs>
+          <use href="#logo" stroke="url(#logo-grad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <span class="site-brand-text"><span class="site-brand-atelier">Atelier</span> <span class="site-brand-svg">SVG</span></span>
+    </a>
+
+    <div class="nav-tree">
+                    <div class="section">
+                <a href="/installation/" class="section-title">Installation</a>
+            </div>
+                    <div class="section">
+                <a href="/quick-start/" class="section-title">Quick Start</a>
+            </div>
+                                        <div class="section is-open">
+                <a href="/document/" class="section-title active">Document</a>
+                                    <ul class="links">
+                                                                                                                                                                <li><a href="/document/creating/">Creating</a></li>
+                                                                                                                <li><a href="/document/parsing/">Parsing</a></li>
+                                                                                                                <li><a href="/document/validation/" class="active">Validation</a></li>
+                                                                                                                <li><a href="/document/sanitization/">Sanitization</a></li>
+                                                                                                                <li><a href="/document/exporting/">Exporting</a></li>
+                                                                        </ul>
+                            </div>
+                                <div class="section">
+                <a href="/elements/" class="section-title">Elements</a>
+                            </div>
+                                <div class="section">
+                <a href="/path/" class="section-title">Paths</a>
+                            </div>
+                                <div class="section">
+                <a href="/styling/" class="section-title">Styling</a>
+                            </div>
+                                <div class="section">
+                <a href="/optimization/" class="section-title">Optimization</a>
+                            </div>
+                                <div class="section">
+                <a href="/morphing/" class="section-title">Morphing</a>
+                            </div>
+                                <div class="section">
+                <a href="/guides/" class="section-title">Guides</a>
+                            </div>
+            </div>
+</nav>
+
+    <main class="main" id="main-content" tabindex="-1">
+        <article class="page-content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+                        <a href="/">SVG</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <a href="/document/">Document</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <span aria-current="page">Validation</span>
+            </nav>
+            <div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: document rect -->
+  <rect x="30" y="20" width="80" height="60" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="42" y1="36" x2="98" y2="36" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="42" y1="48" x2="92" y2="48" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="42" y1="60" x2="86" y2="60" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <!-- Center: vertical dashed gate -->
+  <line x1="175" y1="18" x2="175" y2="82" stroke="#50505e" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <line x1="195" y1="18" x2="195" y2="82" stroke="#50505e" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <!-- Gate post dots -->
+  <circle cx="175" cy="18" r="2.5" fill="#888898"/>
+  <circle cx="195" cy="18" r="2.5" fill="#888898"/>
+  <circle cx="175" cy="82" r="2.5" fill="#888898"/>
+  <circle cx="195" cy="82" r="2.5" fill="#888898"/>
+  <!-- Arrow through gate -->
+  <line x1="130" y1="50" x2="168" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <line x1="202" y1="50" x2="270" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Right: checkmark -->
+  <polyline points="300,52 320,68 365,28" stroke="#b8b8c6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Subtle arc under check -->
+  <path d="M290,75 Q332,85 375,75" stroke="#6a6a7a" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+            <h1>Validation</h1>
+<p>Atelier SVG provides comprehensive validation to check SVG documents for structural issues, broken references, duplicate IDs, accessibility problems, and spec compliance.</p>
+<span class="heading-target" id="quick-validation-via-document" aria-hidden="true"></span><h2 data-toc-id="quick-validation-via-document"><a href="#quick-validation-via-document" class="heading-anchor" aria-label="Link to this section">#</a>Quick Validation via Document</h2>
+<p>The <code>Document</code> class provides direct validation methods:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Svg</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-constant">Svg</span><span class="polar-operator">::</span><span class="polar-function-call">load</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;icon.svg&#039;</span><span class="polar-punctuation">)</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getDocument</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Check if valid (no errors)</span>
+<span class="polar-keyword-control">if</span> <span class="polar-punctuation">(</span><span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">isValid</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+    <span class="polar-keyword-control">echo</span> <span class="polar-string">&#039;Document is valid&#039;</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">}</span>
+
+<span class="polar-comment">// Get a detailed validation result</span>
+<span class="polar-variable">$result</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">validate</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-keyword-control">echo</span> <span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">format</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="validator" aria-hidden="true"></span><h2 data-toc-id="validator"><a href="#validator" class="heading-anchor" aria-label="Link to this section">#</a>Validator</h2>
+<p>For more control, use the <code>Validator</code> class directly with a <code>ValidationProfile</code>:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Validation\Validator</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Validation\ValidationProfile</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$validator</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">Validator</span><span class="polar-punctuation">(</span><span class="polar-constant">ValidationProfile</span><span class="polar-operator">::</span><span class="polar-function-call">strict</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$result</span> <span class="polar-operator">=</span> <span class="polar-variable">$validator</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">validate</span><span class="polar-punctuation">(</span><span class="polar-variable">$document</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-keyword-control">if</span> <span class="polar-punctuation">(</span><span class="polar-operator">!</span><span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">isValid</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+    <span class="polar-keyword-control">foreach</span> <span class="polar-punctuation">(</span><span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getErrors</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">as</span> <span class="polar-variable">$issue</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+        <span class="polar-keyword-control">echo</span> <span class="polar-variable">$issue</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">format</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span> <span class="polar-operator">.</span> <span class="polar-string">&quot;\n&quot;</span><span class="polar-punctuation">;</span>
+    <span class="polar-punctuation">}</span>
+<span class="polar-punctuation">}</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="validation-profiles" aria-hidden="true"></span><h2 data-toc-id="validation-profiles"><a href="#validation-profiles" class="heading-anchor" aria-label="Link to this section">#</a>Validation Profiles</h2>
+<p>Profiles control which rules are checked and how strictly. Three built-in profiles are available:</p>
+<ul>
+<li><strong><code>ValidationProfile::strict()</code></strong>: SVG 1.1 spec compliance. Errors on missing required attributes, invalid nesting, broken references, and duplicate IDs.</li>
+<li><strong><code>ValidationProfile::lenient()</code></strong>: Real-world tolerance. Most issues reported as warnings. Default.</li>
+<li><strong><code>ValidationProfile::accessible()</code></strong>: WCAG focus. Requires <code>&lt;title&gt;</code>, <code>viewBox</code>, and alt text on images.</li>
+</ul>
+<p>Extend or build custom profiles:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$profile</span> <span class="polar-operator">=</span> <span class="polar-constant">ValidationProfile</span><span class="polar-operator">::</span><span class="polar-function-call">lenient</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">with</span><span class="polar-punctuation">(</span><span class="polar-punctuation">[</span>
+    <span class="polar-string">&#039;check_id_format&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+    <span class="polar-string">&#039;require_viewbox&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+<span class="polar-punctuation">]</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="validationresult" aria-hidden="true"></span><h2 data-toc-id="validationresult"><a href="#validationresult" class="heading-anchor" aria-label="Link to this section">#</a>ValidationResult</h2>
+<p>The result object provides typed access to all issues found:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$result</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">validate</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">isValid</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>              <span class="polar-comment">// true if no errors (warnings are OK)</span>
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">hasIssues</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>            <span class="polar-comment">// true if any issues at all</span>
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">count</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>                <span class="polar-comment">// total issue count</span>
+
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getErrors</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>            <span class="polar-comment">// array of error-level issues</span>
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getWarnings</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>          <span class="polar-comment">// array of warning-level issues</span>
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getInfo</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>              <span class="polar-comment">// array of info-level issues</span>
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getCounts</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>            <span class="polar-comment">// [&#039;errors&#039; =&gt; 0, &#039;warnings&#039; =&gt; 2, &#039;info&#039; =&gt; 1]</span>
+
+<span class="polar-keyword-control">echo</span> <span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">format</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>          <span class="polar-comment">// human-readable report</span>
+<span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">toArray</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>              <span class="polar-comment">// array for serialization</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="documentvalidator" aria-hidden="true"></span><h2 data-toc-id="documentvalidator"><a href="#documentvalidator" class="heading-anchor" aria-label="Link to this section">#</a>DocumentValidator</h2>
+<p><code>DocumentValidator</code> provides static utility methods for common validation tasks:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Validation\DocumentValidator</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Simple validation (returns array of error strings)</span>
+<span class="polar-variable">$errors</span> <span class="polar-operator">=</span> <span class="polar-constant">DocumentValidator</span><span class="polar-operator">::</span><span class="polar-function-call">validate</span><span class="polar-punctuation">(</span><span class="polar-variable">$document</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Lint with configurable checks</span>
+<span class="polar-variable">$warnings</span> <span class="polar-operator">=</span> <span class="polar-constant">DocumentValidator</span><span class="polar-operator">::</span><span class="polar-function-call">lint</span><span class="polar-punctuation">(</span><span class="polar-variable">$document</span><span class="polar-punctuation">,</span> <span class="polar-punctuation">[</span>
+    <span class="polar-string">&#039;check_ids&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+    <span class="polar-string">&#039;check_references&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+    <span class="polar-string">&#039;check_colors&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+    <span class="polar-string">&#039;check_transforms&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+    <span class="polar-string">&#039;check_accessibility&#039;</span> <span class="polar-operator">=&gt;</span> <span class="polar-boolean">true</span><span class="polar-punctuation">,</span>
+<span class="polar-punctuation">]</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Get improvement suggestions</span>
+<span class="polar-variable">$suggestions</span> <span class="polar-operator">=</span> <span class="polar-constant">DocumentValidator</span><span class="polar-operator">::</span><span class="polar-function-call">suggestImprovements</span><span class="polar-punctuation">(</span><span class="polar-variable">$document</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="auto-fixing-issues" aria-hidden="true"></span><h2 data-toc-id="auto-fixing-issues"><a href="#auto-fixing-issues" class="heading-anchor" aria-label="Link to this section">#</a>Auto-fixing Issues</h2>
+<p>The library can automatically fix common problems:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-comment">// Fix everything at once</span>
+<span class="polar-variable">$fixes</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">autoFix</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-comment">// [&#039;broken_references&#039; =&gt; 3, &#039;duplicate_ids&#039; =&gt; 1]</span>
+
+<span class="polar-comment">// Or fix specific issues</span>
+<span class="polar-variable">$count</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">fixBrokenReferences</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span> <span class="polar-comment">// removes broken url(#id) references</span>
+<span class="polar-variable">$count</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">fixDuplicateIds</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>     <span class="polar-comment">// renames duplicate IDs</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="reference-tracking" aria-hidden="true"></span><h2 data-toc-id="reference-tracking"><a href="#reference-tracking" class="heading-anchor" aria-label="Link to this section">#</a>Reference Tracking</h2>
+<p>Check for broken and circular references:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-comment">// Find references pointing to non-existent IDs</span>
+<span class="polar-variable">$broken</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">findBrokenReferences</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Find circular dependency chains (e.g., A references B, B references A)</span>
+<span class="polar-variable">$cycles</span> <span class="polar-operator">=</span> <span class="polar-variable">$document</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">findCircularReferences</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="error-handling" aria-hidden="true"></span><h2 data-toc-id="error-handling"><a href="#error-handling" class="heading-anchor" aria-label="Link to this section">#</a>Error handling</h2>
+<p>Validation does not throw. <code>validate()</code> always returns a <code>ValidationResult</code>; check <code>isValid()</code> to determine whether to proceed.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-operator">&lt;</span><span class="polar-punctuation">?</span><span class="polar-constant">php</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Svg</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Validation\Validator</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Validation\ValidationProfile</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-constant">Svg</span><span class="polar-operator">::</span><span class="polar-function-call">load</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;icon.svg&#039;</span><span class="polar-punctuation">)</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getDocument</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$result</span> <span class="polar-operator">=</span> <span class="polar-punctuation">(</span><span class="polar-keyword-operator">new</span> <span class="polar-function-call">Validator</span><span class="polar-punctuation">(</span><span class="polar-constant">ValidationProfile</span><span class="polar-operator">::</span><span class="polar-function-call">strict</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">)</span><span class="polar-punctuation">)</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">validate</span><span class="polar-punctuation">(</span><span class="polar-variable">$document</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-keyword-control">if</span> <span class="polar-punctuation">(</span><span class="polar-operator">!</span><span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">isValid</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+    <span class="polar-keyword-control">foreach</span> <span class="polar-punctuation">(</span><span class="polar-variable">$result</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getErrors</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">as</span> <span class="polar-variable">$issue</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+        <span class="polar-comment">// Each $issue has -&gt;format(), -&gt;getMessage(), -&gt;getSeverity(), -&gt;getElement()</span>
+        <span class="polar-keyword-control">echo</span> <span class="polar-variable">$issue</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">format</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span> <span class="polar-operator">.</span> <span class="polar-string">&quot;\n&quot;</span><span class="polar-punctuation">;</span>
+    <span class="polar-punctuation">}</span>
+    <span class="polar-comment">// Optionally bail out, auto-fix, or log</span>
+<span class="polar-punctuation">}</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="what-validationresult-contains-on-failure" aria-hidden="true"></span><h3 data-toc-id="what-validationresult-contains-on-failure"><a href="#what-validationresult-contains-on-failure" class="heading-anchor" aria-label="Link to this section">#</a>What <code>ValidationResult</code> contains on failure</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isValid()</code></td>
+<td><code>false</code> when at least one error exists</td>
+</tr>
+<tr>
+<td><code>hasIssues()</code></td>
+<td><code>true</code> when any issue exists (including warnings)</td>
+</tr>
+<tr>
+<td><code>getErrors()</code></td>
+<td>Array of error-level <code>ValidationIssue</code> objects</td>
+</tr>
+<tr>
+<td><code>getWarnings()</code></td>
+<td>Array of warning-level <code>ValidationIssue</code> objects</td>
+</tr>
+<tr>
+<td><code>getInfo()</code></td>
+<td>Array of info-level <code>ValidationIssue</code> objects</td>
+</tr>
+<tr>
+<td><code>getCounts()</code></td>
+<td><code>['errors' =&gt; N, 'warnings' =&gt; N, 'info' =&gt; N]</code></td>
+</tr>
+<tr>
+<td><code>format()</code></td>
+<td>Human-readable multi-line report</td>
+</tr>
+<tr>
+<td><code>toArray()</code></td>
+<td>Serializable array of all issues</td>
+</tr>
+</tbody>
+</table>
+<p>Validation never throws <code>ParseException</code> or <code>RuntimeException</code>; those come from loading. If you need to catch loading failures before validating, wrap <code>Svg::load()</code> in a try/catch (see <a href="/document/parsing/">Parsing</a>).</p>
+<span class="heading-target" id="see-also" aria-hidden="true"></span><h2 data-toc-id="see-also"><a href="#see-also" class="heading-anchor" aria-label="Link to this section">#</a>See also</h2>
+<ul>
+<li><a href="../">Document Overview</a>: Core concepts</li>
+<li><a href="../sanitization/">Sanitization</a>: Security-focused cleaning</li>
+<li><a href="../parsing/">Parsing SVGs</a>: Parse profiles for input validation</li>
+</ul>
+
+            <nav class="prev-next">
+            <a href="/document/parsing/">
+            <span class="label">Previous</span>
+            <span class="title">Parsing</span>
+        </a>
+                <a href="/document/sanitization/" class="next">
+            <span class="label">Next</span>
+            <span class="title">Sanitization</span>
+        </a>
+    </nav>
+        </article>
+    </main>
+
+        <aside class="page-toc">
+    <div class="nav-tree">
+        <div class="section">
+            <span class="section-title">On this page</span>
+            <ul class="links">
+                                    <li class="toc-h2">
+                        <a href="#quick-validation-via-document">Quick Validation via Document</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#validator">Validator</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#validation-profiles">Validation Profiles</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#validationresult">ValidationResult</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#documentvalidator">DocumentValidator</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#auto-fixing-issues">Auto-fixing Issues</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#reference-tracking">Reference Tracking</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#error-handling">Error handling</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#see-also">See also</a>
+                    </li>
+                            </ul>
+        </div>
+    </div>
+</aside>
+    </div>
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+@layer reset {
+  :where(*, *::before, *::after) {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :where(img, svg)                        { display: block; max-inline-size: 100%; }
+  :where(a)                               { color: inherit; }
+  :where(ul, ol)                          { list-style: none; }
+  :where(input, button, textarea, select) { font: inherit; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-block-start: 5rem;
+  }
+
+  /* Skip-to-content link - visually hidden until focused. */
+  .skip-link {
+    position: fixed;
+    inset-block-start: var(--space-s);
+    inset-inline-start: var(--space-s);
+    z-index: 9999;
+    padding: var(--space-2xs) var(--space-s);
+    background: var(--surface-1);
+    color: var(--ink-0);
+    border: 1px solid var(--color-brand);
+    border-radius: 9999px;
+    font-size: var(--text-s);
+    text-decoration: none;
+    transform: translateY(-200%);
+    transition: transform 0.15s ease;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+    outline: none;
+  }
+  :is(main, .landing, .error-page):is(:focus, :focus-visible) {
+    outline: none;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--text-m);
+    line-height: 1.7;
+    color: var(--ink-0);
+    background: var(--surface-0);
+    -webkit-font-smoothing: antialiased;
+    text-wrap: pretty;
+    max-inline-size: 100vw;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: light-dark(oklch(0.85 0.06 55), var(--color-brand));
+    color: light-dark(var(--ink-0), white);
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  a { text-decoration-skip-ink: auto; }
+
+  /* --- View transitions ------------------------------------ */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: 120ms ease-out both fade-out; }
+  ::view-transition-new(root) { animation: 180ms ease-out both fade-in; }
+
+  /* --- Base keyframes -------------------------------------- */
+  @keyframes fade-out { to   { opacity: 0; } }
+  @keyframes fade-in  { from { opacity: 0; } }
+  @keyframes fade-up {
+    from { opacity: 0; translate: 0 0.75rem; }
+    to   { opacity: 1; translate: 0; }
+  }
+}

@@ -1,0 +1,101 @@
+@layer tokens {
+  @property --hue-brand {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 230;
+  }
+
+  :root {
+    color-scheme: dark light;
+
+    --hue-brand: 230; /* dark mode brand hue - light mode uses fixed warm tone */
+
+    /* --- Surfaces -------------------------------------------- */
+    --surface-0: light-dark(oklch(0.97 0.012 60), oklch(0.13 0.014 260));
+    --surface-1: light-dark(oklch(0.95 0.010 60), oklch(0.17 0.016 260));
+    --surface-2: light-dark(oklch(0.92 0.012 60), oklch(0.20 0.016 260));
+
+    /* --- Ink ------------------------------------------------- */
+    --ink-0: light-dark(oklch(0.15 0.01 260), oklch(0.93 0.008 260));
+    --ink-1: light-dark(oklch(0.40 0.015 260), oklch(0.72 0.015 260));
+    --ink-2: light-dark(oklch(0.55 0.012 260), oklch(0.52 0.015 260));
+
+    /* --- Brand ----------------------------------------------- */
+    --color-brand: light-dark(
+      oklch(0.45 0.12 55),
+      oklch(0.70 0.19 var(--hue-brand))
+    );
+    --color-brand-soft: light-dark(
+      color-mix(in oklch, var(--color-brand) 4%,  var(--surface-0)),
+      color-mix(in oklch, var(--color-brand) 10%, var(--surface-0))
+    );
+
+    /* --- Borders --------------------------------------------- */
+    --border-0: light-dark(oklch(0.90 0.008 60), oklch(0.24 0.014 260));
+
+    /* --- Hero illustration palette --------------------------- */
+    --hero-primary:     light-dark(oklch(0.45 0.18 48),  oklch(0.78 0.14 235));
+    --hero-secondary:   light-dark(oklch(0.40 0.13 22),  oklch(0.72 0.17 290));
+    --hero-grid:        light-dark(oklch(0.82 0.02 60),  oklch(0.32 0.01 260));
+    --hero-handle:      light-dark(oklch(0.62 0.16 65),  oklch(0.78 0.14 65));
+    --hero-shadow-glow: light-dark(#fff, #000);
+    --hero-shadow-edge: light-dark(#000, #fff);
+    /* Used via stop-color="var()" in the SVG gradient in landing.html.twig */
+    --logo-grad-from:   light-dark(oklch(0.22 0.10 42),  oklch(0.48 0.14 235));
+    --logo-grad-to:     light-dark(oklch(0.18 0.08 62),  oklch(0.42 0.17 290));
+
+    /* --- Semantic -------------------------------------------- */
+    --c-green: oklch(0.68 0.14 145);
+    --c-blue:  oklch(0.65 0.16 250);
+
+    /* --- Type scale (fluid via cqi) -------------------------- */
+    --text-xs:  clamp(0.75rem,  0.7rem  + 0.2cqi, 0.8125rem);
+    --text-s:   clamp(0.875rem, 0.8rem  + 0.3cqi, 0.9375rem);
+    --text-m:   clamp(1rem,     0.95rem + 0.3cqi, 1.125rem);
+    --text-l:   clamp(1.25rem,  1.1rem  + 0.5cqi, 1.5rem);
+    --text-xl:  clamp(1.75rem,  1.4rem  + 1cqi,   2.25rem);
+    --text-2xl: clamp(2.5rem,   2rem    + 1.5cqi,  3.75rem);
+
+    /* --- Fonts ----------------------------------------------- */
+    --font-body: system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
+
+    /* --- Weight scale (light mode +50–100 for warm bg) ------- */
+    --w-thin:    light-dark(350, 300);
+    --w-light:   light-dark(450, 380);
+    --w-regular: light-dark(450, 400);
+    --w-medium:  light-dark(550, 500);
+    --w-semi:    light-dark(600, 550);
+    --w-bold:    light-dark(700, 650);
+
+    /* --- Space scale (fluid via cqi) ------------------------- */
+    --space-3xs: clamp(0.25rem, 0.2rem  + 0.2cqi, 0.375rem);
+    --space-2xs: clamp(0.5rem,  0.4rem  + 0.3cqi, 0.625rem);
+    --space-xs:  clamp(0.5rem,  0.4rem  + 0.5cqi, 1rem);
+    --space-s:   clamp(1rem,    0.8rem  + 0.6cqi, 1.5rem);
+    --space-m:   clamp(1.25rem, 1rem    + 0.8cqi,  2rem);
+    --space-l:   clamp(1.5rem,  1.2rem  + 1cqi,    2.5rem);
+    --space-xl:  clamp(2rem,    1.5rem  + 1.5cqi,  3.5rem);
+
+    /* --- Radius ---------------------------------------------- */
+    --radius-s: 4px;
+    --radius-m: 8px;
+    --radius-l: 12px;
+
+    /* --- Motion ---------------------------------------------- */
+    --duration-fast: 120ms;
+    --ease-out:    cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-soft:   cubic-bezier(0.25, 0.1,  0.25, 1);
+
+    /* --- Layout ---------------------------------------------- */
+    --measure:    70ch;
+    --sidebar-w:  15rem;
+    --toc-w:      16rem;
+    --logo-block: 6rem;
+    --nav-inset:  calc(var(--space-l) + var(--logo-block) + 1rem + var(--space-l));
+  }
+
+  html.light { color-scheme: light; }
+  html.dark  { color-scheme: dark; }
+}

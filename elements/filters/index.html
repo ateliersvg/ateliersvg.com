@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filters - Elements - Atelier SVG</title>
+    <meta name="description" content="SVG filters apply graphical effects (blur, shadows, color shifts) to elements.">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/elements/filters/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Filters - Elements - Atelier SVG">
+    <meta property="og:description" content="SVG filters apply graphical effects (blur, shadows, color shifts) to elements.">
+    <meta property="og:url" content="https://ateliersvg.com/elements/filters/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Filters - Elements - Atelier SVG">
+    <meta name="twitter:description" content="SVG filters apply graphical effects (blur, shadows, color shifts) to elements.">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SVG",
+      "item": "https://ateliersvg.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Elements",
+      "item": "https://ateliersvg.com/elements/"
+    },{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Filters",
+      "item": "https://ateliersvg.com/elements/filters/"
+    }  ]
+}
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="page-body">
+    <nav class="sidebar" id="sidebar">
+    <a href="/" class="site-brand">
+        <svg class="site-logo" viewBox="0 0 354 363" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+              <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+            </linearGradient>
+          </defs>
+          <use href="#logo" stroke="url(#logo-grad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <span class="site-brand-text"><span class="site-brand-atelier">Atelier</span> <span class="site-brand-svg">SVG</span></span>
+    </a>
+
+    <div class="nav-tree">
+                    <div class="section">
+                <a href="/installation/" class="section-title">Installation</a>
+            </div>
+                    <div class="section">
+                <a href="/quick-start/" class="section-title">Quick Start</a>
+            </div>
+                                        <div class="section">
+                <a href="/document/" class="section-title">Document</a>
+                            </div>
+                                <div class="section is-open">
+                <a href="/elements/" class="section-title active">Elements</a>
+                                    <ul class="links">
+                                                                                                                                                                <li><a href="/elements/structure/">Structure</a></li>
+                                                                                                                <li><a href="/elements/shapes/">Shapes</a></li>
+                                                                                                                <li><a href="/elements/text/">Text</a></li>
+                                                                                                                <li><a href="/elements/gradients/">Gradients</a></li>
+                                                                                                                <li><a href="/elements/filters/" class="active">Filters</a></li>
+                                                                                                                <li><a href="/elements/clipping/">Clipping</a></li>
+                                                                                                                <li><a href="/elements/animation/">Animation</a></li>
+                                                                                                                <li><a href="/elements/selectors/">Selectors</a></li>
+                                                                                                                <li><a href="/elements/collections/">Collections</a></li>
+                                                                                                                <li><a href="/elements/accessibility/">Accessibility</a></li>
+                                                                        </ul>
+                            </div>
+                                <div class="section">
+                <a href="/path/" class="section-title">Paths</a>
+                            </div>
+                                <div class="section">
+                <a href="/styling/" class="section-title">Styling</a>
+                            </div>
+                                <div class="section">
+                <a href="/optimization/" class="section-title">Optimization</a>
+                            </div>
+                                <div class="section">
+                <a href="/morphing/" class="section-title">Morphing</a>
+                            </div>
+                                <div class="section">
+                <a href="/guides/" class="section-title">Guides</a>
+                            </div>
+            </div>
+</nav>
+
+    <main class="main" id="main-content" tabindex="-1">
+        <article class="page-content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+                        <a href="/">SVG</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <a href="/elements/">Elements</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <span aria-current="page">Filters</span>
+            </nav>
+            <div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left circle (original) -->
+  <circle cx="100" cy="50" r="22" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- Shadow offset circle -->
+  <circle cx="106" cy="54" r="22" stroke="#6a6a7a" stroke-width="0.8" opacity="0.35"/>
+  <!-- Dashed arrow to right -->
+  <line x1="140" y1="50" x2="230" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="224,44 234,50 224,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right circle with noise dots -->
+  <circle cx="300" cy="50" r="22" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="288" cy="40" r="1.2" fill="#888898"/>
+  <circle cx="310" cy="36" r="1" fill="#888898"/>
+  <circle cx="295" cy="58" r="1.4" fill="#888898"/>
+  <circle cx="314" cy="52" r="1" fill="#888898"/>
+  <circle cx="305" cy="65" r="1.2" fill="#888898"/>
+  <circle cx="284" cy="50" r="1" fill="#888898"/>
+  <circle cx="316" cy="44" r="0.8" fill="#888898"/>
+  <circle cx="292" cy="34" r="0.8" fill="#888898"/>
+  <!-- Label dots -->
+  <circle cx="100" cy="26" r="2" fill="#888898"/>
+  <circle cx="300" cy="26" r="2" fill="#888898"/>
+  <!-- Faint baseline -->
+  <line x1="40" y1="82" x2="360" y2="82" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+            <h1>Filters</h1>
+<p>SVG filters apply graphical effects (blur, shadows, color shifts) to
+elements. A <code>&lt;filter&gt;</code> element contains one or more filter primitives
+that are chained together.</p>
+<span class="heading-target" id="how-filters-work" aria-hidden="true"></span><h2 data-toc-id="how-filters-work"><a href="#how-filters-work" class="heading-anchor" aria-label="Link to this section">#</a>How Filters Work</h2>
+<ol>
+<li>Define a <code>&lt;filter&gt;</code> element with primitives inside <code>&lt;defs&gt;</code>.</li>
+<li>Reference it from any element with <code>filter=&quot;url(#id)&quot;</code>.</li>
+<li>Primitives use <code>in</code> to read input and <code>result</code> to name output.</li>
+<li>Special inputs: <code>SourceGraphic</code>, <code>SourceAlpha</code>, <code>BackgroundImage</code>.</li>
+</ol>
+<span class="heading-target" id="filterelement" aria-hidden="true"></span><h2 data-toc-id="filterelement"><a href="#filterelement" class="heading-anchor" aria-label="Link to this section">#</a>FilterElement</h2>
+<p>The container for filter primitives.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FilterElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$filter</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FilterElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$filter</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setId</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;my-filter&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$filter</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setX</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;-10%&#039;</span><span class="polar-punctuation">)</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setY</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;-10%&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$filter</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setWidth</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;120%&#039;</span><span class="polar-punctuation">)</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setHeight</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;120%&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$filter</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setFilterUnits</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;objectBoundingBox&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$filter</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setPrimitiveUnits</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;userSpaceOnUse&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="filterbuilder" aria-hidden="true"></span><h2 data-toc-id="filterbuilder"><a href="#filterbuilder" class="heading-anchor" aria-label="Link to this section">#</a>FilterBuilder</h2>
+<p>The <code>FilterBuilder</code> provides a fluent API for constructing filters and
+adding them to the document's <code>&lt;defs&gt;</code>.</p>
+<span class="heading-target" id="fluent-api" aria-hidden="true"></span><h3 data-toc-id="fluent-api"><a href="#fluent-api" class="heading-anchor" aria-label="Link to this section">#</a>Fluent API</h3>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Builder\FilterBuilder</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Each method&#039;s last two args are: in (input name) and result (output name).</span>
+<span class="polar-comment">// A result from one step becomes the in of the next.</span>
+<span class="polar-variable">$filter</span> <span class="polar-operator">=</span> <span class="polar-constant">FilterBuilder</span><span class="polar-operator">::</span><span class="polar-function-call">create</span><span class="polar-punctuation">(</span><span class="polar-variable">$doc</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;custom-effect&#039;</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">gaussianBlur</span><span class="polar-punctuation">(</span><span class="polar-number">3</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;SourceAlpha&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;blur&#039;</span><span class="polar-punctuation">)</span>      <span class="polar-comment">// blur the alpha channel, output: &#039;blur&#039;</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">offset</span><span class="polar-punctuation">(</span><span class="polar-number">2</span><span class="polar-punctuation">,</span> <span class="polar-number">2</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;blur&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;shifted&#039;</span><span class="polar-punctuation">)</span>              <span class="polar-comment">// shift the blurred layer, output: &#039;shifted&#039;</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">flood</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;#000000&#039;</span><span class="polar-punctuation">,</span> <span class="polar-number">0.3</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;color&#039;</span><span class="polar-punctuation">)</span>               <span class="polar-comment">// solid color fill, output: &#039;color&#039;</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">composite</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;in&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;color&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;shifted&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;shadow&#039;</span><span class="polar-punctuation">)</span> <span class="polar-comment">// clip color to shifted shape, output: &#039;shadow&#039;</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">blend</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;normal&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;SourceGraphic&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;shadow&#039;</span><span class="polar-punctuation">)</span>   <span class="polar-comment">// layer original graphic over shadow</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">addToDefs</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">getFilter</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>Available primitive methods on the builder:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Primitive</th>
+<th>Key parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gaussianBlur</code></td>
+<td><code>feGaussianBlur</code></td>
+<td>stdDeviation, in, result</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>feOffset</code></td>
+<td>dx, dy, in, result</td>
+</tr>
+<tr>
+<td><code>colorMatrix</code></td>
+<td><code>feColorMatrix</code></td>
+<td>type, values, in, result</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>feBlend</code></td>
+<td>mode, in, in2, result</td>
+</tr>
+<tr>
+<td><code>composite</code></td>
+<td><code>feComposite</code></td>
+<td>operator, in, in2, result</td>
+</tr>
+<tr>
+<td><code>flood</code></td>
+<td><code>feFlood</code></td>
+<td>color, opacity, result</td>
+</tr>
+</tbody>
+</table>
+<span class="heading-target" id="shortcut-methods" aria-hidden="true"></span><h3 data-toc-id="shortcut-methods"><a href="#shortcut-methods" class="heading-anchor" aria-label="Link to this section">#</a>Shortcut Methods</h3>
+<p>Common effects as one-liners:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-comment">// Simple blur</span>
+<span class="polar-constant">FilterBuilder</span><span class="polar-operator">::</span><span class="polar-function-call">createBlur</span><span class="polar-punctuation">(</span><span class="polar-variable">$doc</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;blur-5&#039;</span><span class="polar-punctuation">,</span> <span class="polar-number">5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Drop shadow (dx, dy, blur, color, opacity)</span>
+<span class="polar-constant">FilterBuilder</span><span class="polar-operator">::</span><span class="polar-function-call">createDropShadow</span><span class="polar-punctuation">(</span><span class="polar-variable">$doc</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;shadow&#039;</span><span class="polar-punctuation">,</span> <span class="polar-number">2</span><span class="polar-punctuation">,</span> <span class="polar-number">2</span><span class="polar-punctuation">,</span> <span class="polar-number">4</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;#000&#039;</span><span class="polar-punctuation">,</span> <span class="polar-number">0.3</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Glow effect (color, strength, opacity)</span>
+<span class="polar-constant">FilterBuilder</span><span class="polar-operator">::</span><span class="polar-function-call">createGlow</span><span class="polar-punctuation">(</span><span class="polar-variable">$doc</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;glow&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;#3b82f6&#039;</span><span class="polar-punctuation">,</span> <span class="polar-number">2</span><span class="polar-punctuation">,</span> <span class="polar-number">0.8</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Desaturate / grayscale (0 = none, 1 = full grayscale)</span>
+<span class="polar-constant">FilterBuilder</span><span class="polar-operator">::</span><span class="polar-function-call">createDesaturate</span><span class="polar-punctuation">(</span><span class="polar-variable">$doc</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;gray&#039;</span><span class="polar-punctuation">,</span> <span class="polar-number">1.0</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>All shortcuts add the filter to <code>&lt;defs&gt;</code> automatically.</p>
+<span class="heading-target" id="applying-a-filter" aria-hidden="true"></span><h3 data-toc-id="applying-a-filter"><a href="#applying-a-filter" class="heading-anchor" aria-label="Link to this section">#</a>Applying a Filter</h3>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$rect</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">applyFilter</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;my-filter&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-comment">// equivalent to:</span>
+<span class="polar-variable">$rect</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setAttribute</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;filter&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;url(#my-filter)&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Remove</span>
+<span class="polar-variable">$rect</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">removeFilter</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Check</span>
+<span class="polar-variable">$rect</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getFilterId</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span> <span class="polar-comment">// &#039;my-filter&#039; or null</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="filter-primitives" aria-hidden="true"></span><h2 data-toc-id="filter-primitives"><a href="#filter-primitives" class="heading-anchor" aria-label="Link to this section">#</a>Filter Primitives</h2>
+<p>All filter primitives extend <code>AbstractFilterPrimitiveElement</code>, which
+provides shared methods: <code>setIn</code>, <code>setResult</code>, <code>setX</code>, <code>setY</code>,
+<code>setWidth</code>, <code>setHeight</code>.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-comment">// Common to all primitives:</span>
+<span class="polar-variable">$primitive</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;SourceGraphic&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$primitive</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setResult</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;output1&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="fegaussianblurelement" aria-hidden="true"></span><h3 data-toc-id="fegaussianblurelement"><a href="#fegaussianblurelement" class="heading-anchor" aria-label="Link to this section">#</a>FeGaussianBlurElement</h3>
+<p>Applies a Gaussian blur.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeGaussianBlurElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$blur</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeGaussianBlurElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$blur</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setStdDeviation</span><span class="polar-punctuation">(</span><span class="polar-number">5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>       <span class="polar-comment">// single value or &quot;x y&quot; pair</span>
+<span class="polar-variable">$blur</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setEdgeMode</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;duplicate&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>  <span class="polar-comment">// &#039;duplicate&#039;, &#039;wrap&#039;, &#039;none&#039;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="feoffsetelement" aria-hidden="true"></span><h3 data-toc-id="feoffsetelement"><a href="#feoffsetelement" class="heading-anchor" aria-label="Link to this section">#</a>FeOffsetElement</h3>
+<p>Offsets the input image.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeOffsetElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$offset</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeOffsetElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$offset</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setDx</span><span class="polar-punctuation">(</span><span class="polar-number">5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$offset</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setDy</span><span class="polar-punctuation">(</span><span class="polar-number">5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="feblendelement" aria-hidden="true"></span><h3 data-toc-id="feblendelement"><a href="#feblendelement" class="heading-anchor" aria-label="Link to this section">#</a>FeBlendElement</h3>
+<p>Blends two input images.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeBlendElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$blend</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeBlendElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$blend</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setMode</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;multiply&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>  <span class="polar-comment">// &#039;normal&#039;, &#039;multiply&#039;, &#039;screen&#039;, &#039;darken&#039;, &#039;lighten&#039;</span>
+<span class="polar-variable">$blend</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;SourceGraphic&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$blend</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn2</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;BackgroundImage&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="fecolormatrixelement" aria-hidden="true"></span><h3 data-toc-id="fecolormatrixelement"><a href="#fecolormatrixelement" class="heading-anchor" aria-label="Link to this section">#</a>FeColorMatrixElement</h3>
+<p>Applies a color transformation matrix.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeColorMatrixElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$cm</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeColorMatrixElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$cm</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setType</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;saturate&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>    <span class="polar-comment">// &#039;matrix&#039;, &#039;saturate&#039;, &#039;hueRotate&#039;, &#039;luminanceToAlpha&#039;</span>
+<span class="polar-variable">$cm</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setValues</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;0.5&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="fecompositeelement" aria-hidden="true"></span><h3 data-toc-id="fecompositeelement"><a href="#fecompositeelement" class="heading-anchor" aria-label="Link to this section">#</a>FeCompositeElement</h3>
+<p>Combines images using Porter-Duff compositing.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeCompositeElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$comp</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeCompositeElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$comp</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setOperator</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;in&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>  <span class="polar-comment">// &#039;over&#039;, &#039;in&#039;, &#039;out&#039;, &#039;atop&#039;, &#039;xor&#039;, &#039;arithmetic&#039;</span>
+<span class="polar-variable">$comp</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;SourceGraphic&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$comp</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn2</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;BackgroundImage&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="fefloodelement" aria-hidden="true"></span><h3 data-toc-id="fefloodelement"><a href="#fefloodelement" class="heading-anchor" aria-label="Link to this section">#</a>FeFloodElement</h3>
+<p>Fills the filter region with a solid color.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeFloodElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$flood</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeFloodElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$flood</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setFloodColor</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;#ff0000&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$flood</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setFloodOpacity</span><span class="polar-punctuation">(</span><span class="polar-number">0.5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="femergeelement-femergenodeelement" aria-hidden="true"></span><h3 data-toc-id="femergeelement-femergenodeelement"><a href="#femergeelement-femergenodeelement" class="heading-anchor" aria-label="Link to this section">#</a>FeMergeElement / FeMergeNodeElement</h3>
+<p>Composites multiple layers.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeMergeElement</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeMergeNodeElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$merge</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeMergeElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$node1</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeMergeNodeElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$node1</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;blur&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$node2</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeMergeNodeElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$node2</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;SourceGraphic&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$merge</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">appendChild</span><span class="polar-punctuation">(</span><span class="polar-variable">$node1</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$merge</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">appendChild</span><span class="polar-punctuation">(</span><span class="polar-variable">$node2</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="fedisplacementmapelement" aria-hidden="true"></span><h3 data-toc-id="fedisplacementmapelement"><a href="#fedisplacementmapelement" class="heading-anchor" aria-label="Link to this section">#</a>FeDisplacementMapElement</h3>
+<p>Displaces pixels using values from a second image.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeDisplacementMapElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$displace</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeDisplacementMapElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$displace</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;SourceGraphic&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$displace</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn2</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;displacement&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="femorphologyelement" aria-hidden="true"></span><h3 data-toc-id="femorphologyelement"><a href="#femorphologyelement" class="heading-anchor" aria-label="Link to this section">#</a>FeMorphologyElement</h3>
+<p>Erodes or dilates the input.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeMorphologyElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$morph</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeMorphologyElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$morph</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setOperator</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;dilate&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>  <span class="polar-comment">// &#039;erode&#039; or &#039;dilate&#039;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="feturbulenceelement" aria-hidden="true"></span><h3 data-toc-id="feturbulenceelement"><a href="#feturbulenceelement" class="heading-anchor" aria-label="Link to this section">#</a>FeTurbulenceElement</h3>
+<p>Generates Perlin turbulence or fractal noise.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeTurbulenceElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$turb</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeTurbulenceElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-comment">// Attributes set via setAttribute for type, baseFrequency, numOctaves, seed</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="feimageelement" aria-hidden="true"></span><h3 data-toc-id="feimageelement"><a href="#feimageelement" class="heading-anchor" aria-label="Link to this section">#</a>FeImageElement</h3>
+<p>Fetches an external image for use in the filter.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeImageElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$img</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeImageElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$img</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setAttribute</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;href&#039;</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;texture.png&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="fetileelement" aria-hidden="true"></span><h3 data-toc-id="fetileelement"><a href="#fetileelement" class="heading-anchor" aria-label="Link to this section">#</a>FeTileElement</h3>
+<p>Tiles the input to fill the filter region.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeTileElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$tile</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeTileElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$tile</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setIn</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;pattern&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="feconvolvematrixelement" aria-hidden="true"></span><h3 data-toc-id="feconvolvematrixelement"><a href="#feconvolvematrixelement" class="heading-anchor" aria-label="Link to this section">#</a>FeConvolveMatrixElement</h3>
+<p>Applies a convolution matrix for effects like sharpening or embossing.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Element\Filter\FeConvolveMatrixElement</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$conv</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">FeConvolveMatrixElement</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-comment">// Set kernelMatrix, order, etc. via setAttribute</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="lighting-primitives" aria-hidden="true"></span><h3 data-toc-id="lighting-primitives"><a href="#lighting-primitives" class="heading-anchor" aria-label="Link to this section">#</a>Lighting Primitives</h3>
+<p>Simulate lighting with light sources:</p>
+<ul>
+<li><code>FeDiffuseLightingElement</code>: diffuse lighting</li>
+<li><code>FeSpecularLightingElement</code>: specular lighting</li>
+</ul>
+<p>Light sources (placed inside lighting elements):</p>
+<ul>
+<li><code>FeDistantLightElement</code>: distant (directional) light</li>
+<li><code>FePointLightElement</code>: point light</li>
+<li><code>FeSpotLightElement</code>: spot light</li>
+</ul>
+<span class="heading-target" id="fecomponenttransferelement" aria-hidden="true"></span><h3 data-toc-id="fecomponenttransferelement"><a href="#fecomponenttransferelement" class="heading-anchor" aria-label="Link to this section">#</a>FeComponentTransferElement</h3>
+<p>Per-channel transfer functions using child elements:</p>
+<ul>
+<li><code>FeFuncRElement</code>: red channel</li>
+<li><code>FeFuncGElement</code>: green channel</li>
+<li><code>FeFuncBElement</code>: blue channel</li>
+<li><code>FeFuncAElement</code>: alpha channel</li>
+</ul>
+<span class="heading-target" id="see-also" aria-hidden="true"></span><h2 data-toc-id="see-also"><a href="#see-also" class="heading-anchor" aria-label="Link to this section">#</a>See also</h2>
+<ul>
+<li><a href="../shapes/">Shapes</a>: elements to apply filters to</li>
+<li><a href="../">Overview</a>: element base classes</li>
+</ul>
+
+            <nav class="prev-next">
+            <a href="/elements/gradients/">
+            <span class="label">Previous</span>
+            <span class="title">Gradients</span>
+        </a>
+                <a href="/elements/clipping/" class="next">
+            <span class="label">Next</span>
+            <span class="title">Clipping</span>
+        </a>
+    </nav>
+        </article>
+    </main>
+
+        <aside class="page-toc">
+    <div class="nav-tree">
+        <div class="section">
+            <span class="section-title">On this page</span>
+            <ul class="links">
+                                    <li class="toc-h2">
+                        <a href="#how-filters-work">How Filters Work</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#filterelement">FilterElement</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#filterbuilder">FilterBuilder</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#filter-primitives">Filter Primitives</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#see-also">See also</a>
+                    </li>
+                            </ul>
+        </div>
+    </div>
+</aside>
+    </div>
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>

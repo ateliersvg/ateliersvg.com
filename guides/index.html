@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guides - Atelier SVG</title>
+    <meta name="description" content="Practical, end-to-end recipes for everyday SVG work, from sanitizing user uploads to building icons, animating shapes, and cropping documents to their content.">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/guides/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Guides - Atelier SVG">
+    <meta property="og:description" content="Practical, end-to-end recipes for everyday SVG work, from sanitizing user uploads to building icons, animating shapes, and cropping documents to their content.">
+    <meta property="og:url" content="https://ateliersvg.com/guides/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Guides - Atelier SVG">
+    <meta name="twitter:description" content="Practical, end-to-end recipes for everyday SVG work, from sanitizing user uploads to building icons, animating shapes, and cropping documents to their content.">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SVG",
+      "item": "https://ateliersvg.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Guides",
+      "item": "https://ateliersvg.com/guides/"
+    }  ]
+}
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="page-body">
+    <nav class="sidebar" id="sidebar">
+    <a href="/" class="site-brand">
+        <svg class="site-logo" viewBox="0 0 354 363" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+              <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+            </linearGradient>
+          </defs>
+          <use href="#logo" stroke="url(#logo-grad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <span class="site-brand-text"><span class="site-brand-atelier">Atelier</span> <span class="site-brand-svg">SVG</span></span>
+    </a>
+
+    <div class="nav-tree">
+                    <div class="section">
+                <a href="/installation/" class="section-title">Installation</a>
+            </div>
+                    <div class="section">
+                <a href="/quick-start/" class="section-title">Quick Start</a>
+            </div>
+                                        <div class="section">
+                <a href="/document/" class="section-title">Document</a>
+                            </div>
+                                <div class="section">
+                <a href="/elements/" class="section-title">Elements</a>
+                            </div>
+                                <div class="section">
+                <a href="/path/" class="section-title">Paths</a>
+                            </div>
+                                <div class="section">
+                <a href="/styling/" class="section-title">Styling</a>
+                            </div>
+                                <div class="section">
+                <a href="/optimization/" class="section-title">Optimization</a>
+                            </div>
+                                <div class="section">
+                <a href="/morphing/" class="section-title">Morphing</a>
+                            </div>
+                                <div class="section is-open">
+                <a href="/guides/" class="section-title active">Guides</a>
+                            </div>
+            </div>
+</nav>
+
+    <main class="main" id="main-content" tabindex="-1">
+        <article class="page-content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+                        <a href="/">SVG</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <span aria-current="page">Guides</span>
+            </nav>
+            <div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <rect x="30" y="20" width="70" height="60" rx="4" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="42" y1="35" x2="88" y2="35" stroke="#6a6a7a" stroke-width="0.7" stroke-linecap="round"/>
+  <line x1="42" y1="44" x2="82" y2="44" stroke="#6a6a7a" stroke-width="0.7" stroke-linecap="round"/>
+  <line x1="42" y1="53" x2="75" y2="53" stroke="#6a6a7a" stroke-width="0.7" stroke-linecap="round"/>
+  <line x1="42" y1="62" x2="85" y2="62" stroke="#6a6a7a" stroke-width="0.7" stroke-linecap="round"/>
+  <path d="M140,72 L170,28 L200,72" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="170" cy="28" r="3" fill="#18181f" stroke="#888898" stroke-width="1"/>
+  <path d="M240,30 Q270,20 280,50 Q290,80 320,70" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="240" cy="30" r="2.5" fill="#888898"/>
+  <circle cx="320" cy="70" r="2.5" fill="#888898"/>
+  <rect x="350" y="30" width="30" height="40" rx="3" stroke="#b0b0be" stroke-width="1"/>
+  <path d="M358,46 L364,52 L376,40" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</div>
+            <h1>Guides</h1>
+<p>Practical, end-to-end recipes for everyday SVG work, from sanitizing user uploads to building icons, animating shapes, and cropping documents to their content. Each guide stands on its own and links out to the underlying APIs when you want to go deeper.</p>
+
+
+                            <ul class="guide-index">
+                                                                                                                                                <li class="guide-index-item">
+                                <a href="/guides/sanitize-uploads/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Dangerous input shapes, left -->
+  <path d="M30,65 L42,30 L50,55 L62,22 L70,50 L82,28" stroke="#6a6a7a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="95" y="35" width="20" height="25" rx="2" stroke="#6a6a7a" stroke-width="0.8"/>
+  <line x1="100" y1="42" x2="110" y2="42" stroke="#6a6a7a" stroke-width="0.5"/>
+  <circle cx="130" cy="48" r="10" stroke="#6a6a7a" stroke-width="0.8"/>
+  <!-- Shield / filter gate -->
+  <path d="M185,20 L210,28 L210,62 L185,78 L160,62 L160,28 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <polyline points="175,50 183,58 198,42" stroke="#888898" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Clean output shapes, right -->
+  <rect x="250" y="32" width="28" height="28" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="320" cy="46" r="14" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="320" cy="46" r="2" fill="#888898"/>
+  <line x1="360" y1="30" x2="380" y2="62" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <circle cx="360" cy="30" r="2.5" fill="#18181f" stroke="#888898" stroke-width="0.8"/>
+  <circle cx="380" cy="62" r="2.5" fill="#18181f" stroke="#888898" stroke-width="0.8"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Sanitize Uploads</span>
+                                        <span class="guide-index-desc">Accept SVGs from users without risking XSS. Strip scripts, event handlers, and dangerous content, then validate and optimize before serving.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/batch-optimize/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: 3 overlapping document rects -->
+  <rect x="38" y="28" width="50" height="50" rx="3" stroke="#6a6a7a" stroke-width="0.8"/>
+  <rect x="48" y="22" width="50" height="50" rx="3" stroke="#b0b0be" stroke-width="1"/>
+  <rect x="58" y="16" width="50" height="50" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- Content lines in top doc -->
+  <line x1="66" y1="28" x2="100" y2="28" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="66" y1="36" x2="96" y2="36" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="66" y1="44" x2="92" y2="44" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <!-- Arrow -->
+  <line x1="130" y1="45" x2="240" y2="45" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="234,39 244,45 234,51" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Processing dots -->
+  <circle cx="165" cy="45" r="1.5" fill="#888898"/>
+  <circle cx="190" cy="45" r="2" fill="#888898"/>
+  <circle cx="215" cy="45" r="1.5" fill="#888898"/>
+  <!-- Right: 3 compressed/thinner docs -->
+  <rect x="268" y="34" width="38" height="36" rx="2" stroke="#6a6a7a" stroke-width="0.6"/>
+  <rect x="278" y="28" width="38" height="36" rx="2" stroke="#b0b0be" stroke-width="0.8"/>
+  <rect x="288" y="22" width="38" height="36" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <!-- Thin content lines in compressed -->
+  <line x1="294" y1="32" x2="320" y2="32" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="294" y1="38" x2="316" y2="38" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <!-- Size indicator -->
+  <line x1="348" y1="22" x2="348" y2="58" stroke="#888898" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="345" y1="22" x2="351" y2="22" stroke="#888898" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="345" y1="58" x2="351" y2="58" stroke="#888898" stroke-width="0.6" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Batch Optimize</span>
+                                        <span class="guide-index-desc">Optimize an entire directory of SVG files in a build step or CI pipeline using configurable optimization passes.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/working-with-groups/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Outer group bracket -->
+  <rect x="25" y="12" width="350" height="76" rx="4" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <!-- Group A (left) -->
+  <rect x="40" y="24" width="140" height="52" rx="3" stroke="#b0b0be" stroke-width="1" stroke-dasharray="4 2"/>
+  <!-- Elements in group A -->
+  <rect x="55" y="34" width="28" height="28" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="55" cy="34" r="1.5" fill="#888898"/>
+  <circle cx="115" cy="48" r="15" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="115" cy="48" r="2" fill="#18181f"/>
+  <!-- Transform arrow on group A -->
+  <path d="M50,20 Q90,8 130,20" stroke="#888898" stroke-width="0.6" stroke-dasharray="2 2" stroke-linecap="round"/>
+  <polyline points="126,16 132,20 126,24" stroke="#888898" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Group B (right) -->
+  <rect x="200" y="24" width="160" height="52" rx="3" stroke="#b0b0be" stroke-width="1" stroke-dasharray="4 2"/>
+  <!-- Elements in group B -->
+  <polygon points="230,36 244,64 216,64" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <line x1="270" y1="35" x2="270" y2="65" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="270" cy="35" r="2" fill="#888898"/>
+  <circle cx="270" cy="65" r="2" fill="#888898"/>
+  <!-- Nested sub-group inside B -->
+  <rect x="290" y="32" width="58" height="36" rx="2" stroke="#6a6a7a" stroke-width="0.6" stroke-dasharray="3 2"/>
+  <rect x="302" y="40" width="14" height="14" rx="1" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="338" cy="50" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="338" cy="50" r="1.5" fill="#888898"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Working with Groups</span>
+                                        <span class="guide-index-desc">Use groups to scope transforms, share attributes, and structure complex SVG documents.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/build-charts/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Bar chart baseline -->
+  <line x1="40" y1="75" x2="240" y2="75" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <!-- Y axis -->
+  <line x1="40" y1="20" x2="40" y2="75" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <!-- 5 bars of varying heights -->
+  <rect x="55" y="50" width="22" height="25" rx="1" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="85" y="28" width="22" height="47" rx="1" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="115" y="42" width="22" height="33" rx="1" stroke="#b0b0be" stroke-width="1.2"/>
+  <rect x="145" y="22" width="22" height="53" rx="1" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="175" y="55" width="22" height="20" rx="1" stroke="#b0b0be" stroke-width="1"/>
+  <!-- Bar top dots -->
+  <circle cx="66" cy="50" r="1.5" fill="#888898"/>
+  <circle cx="96" cy="28" r="1.5" fill="#888898"/>
+  <circle cx="126" cy="42" r="1.5" fill="#888898"/>
+  <circle cx="156" cy="22" r="1.5" fill="#888898"/>
+  <circle cx="186" cy="55" r="1.5" fill="#888898"/>
+  <!-- Right: pie chart -->
+  <circle cx="310" cy="48" r="26" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="310" y1="48" x2="310" y2="22" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="310" y1="48" x2="334" y2="56" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="310" y1="48" x2="290" y2="66" stroke="#b0b0be" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Pie center dot -->
+  <circle cx="310" cy="48" r="2" fill="#888898"/>
+  <!-- Connecting dashes -->
+  <line x1="210" y1="50" x2="278" y2="50" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Build Charts</span>
+                                        <span class="guide-index-desc">Generate SVG charts and data visualizations programmatically in PHP. Compose bar charts, add accessible metadata, and combine layouts.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/creating-icons/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: grid with icon -->
+  <rect x="30" y="22" width="56" height="56" rx="2" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <!-- Grid lines -->
+  <line x1="30" y1="36" x2="86" y2="36" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="30" y1="50" x2="86" y2="50" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="30" y1="64" x2="86" y2="64" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="44" y1="22" x2="44" y2="78" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="58" y1="22" x2="58" y2="78" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <line x1="72" y1="22" x2="72" y2="78" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <!-- House icon on grid -->
+  <path d="M46,62 L46,48 L58,36 L70,48 L70,62 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="55" y="52" width="8" height="10" rx="1" stroke="#b0b0be" stroke-width="1"/>
+  <!-- Dashed connector -->
+  <line x1="100" y1="50" x2="145" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Center: currentColor swatch concept -->
+  <circle cx="175" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="175" cy="40" r="3" fill="#888898"/>
+  <circle cx="200" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="200" cy="40" r="3" fill="#6a6a7a"/>
+  <circle cx="225" cy="40" r="8" stroke="#b0b0be" stroke-width="1"/>
+  <circle cx="225" cy="40" r="3" fill="#18181f"/>
+  <!-- Label line below -->
+  <line x1="170" y1="58" x2="230" y2="58" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round"/>
+  <line x1="178" y1="64" x2="222" y2="64" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <!-- Dashed connector -->
+  <line x1="245" y1="50" x2="285" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Right: scaled icon instances -->
+  <path d="M302,58 L302,48 L310,40 L318,48 L318,58 Z" stroke="#b8b8c6" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M338,64 L338,46 L352,32 L366,46 L366,64 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="348" y="52" width="8" height="12" rx="1" stroke="#b0b0be" stroke-width="0.8"/>
+  <!-- Scale arrows -->
+  <line x1="296" y1="68" x2="324" y2="68" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="332" y1="72" x2="372" y2="72" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Creating Icons</span>
+                                        <span class="guide-index-desc">Build accessible, optimized SVG icons - viewBox setup, currentColor, accessibility annotations, and production export.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/sprites-and-symbols/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Sprite sheet container -->
+  <rect x="25" y="15" width="350" height="70" rx="4" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <!-- Dividers -->
+  <line x1="112" y1="20" x2="112" y2="80" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="200" y1="20" x2="200" y2="80" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <line x1="288" y1="20" x2="288" y2="80" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 3"/>
+  <!-- Icon 1: star -->
+  <path d="M68,34 L72,46 L84,46 L74,54 L78,66 L68,58 L58,66 L62,54 L52,46 L64,46 Z" stroke="#b8b8c6" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Icon 2: circle -->
+  <circle cx="156" cy="50" r="16" stroke="#b0b0be" stroke-width="1.2"/>
+  <circle cx="156" cy="50" r="2" fill="#888898"/>
+  <!-- Icon 3: rect -->
+  <rect x="228" y="34" width="30" height="30" rx="3" stroke="#b8b8c6" stroke-width="1.2"/>
+  <!-- Icon 4: triangle (selected) -->
+  <rect x="296" y="28" width="52" height="44" rx="2" stroke="#888898" stroke-width="1" stroke-dasharray="3 2"/>
+  <path d="M310,64 L322,36 L334,64 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Sprite Sheets</span>
+                                        <span class="guide-index-desc">Combine multiple SVG icons into a single sprite using &lt;symbol&gt; and &lt;use&gt; to reduce HTTP requests and keep icons consistent across your app.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/animate-shapes/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Square at left -->
+  <rect x="25" y="32" width="36" height="36" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="43" cy="50" r="2" fill="#18181f"/>
+  <!-- Curved arrow path between -->
+  <path d="M70,40 Q140,15 200,40 Q260,65 330,35" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <!-- Ghost shape 1: rounded square fading -->
+  <rect x="122" y="30" width="34" height="34" rx="8" stroke="#b0b0be" stroke-width="1" opacity="0.4"/>
+  <circle cx="139" cy="47" r="1.5" fill="#888898" opacity="0.4"/>
+  <!-- Ghost shape 2: more circular -->
+  <rect x="223" y="32" width="32" height="32" rx="14" stroke="#b0b0be" stroke-width="1" opacity="0.6"/>
+  <circle cx="239" cy="48" r="1.5" fill="#888898" opacity="0.6"/>
+  <!-- Circle at right -->
+  <circle cx="365" cy="48" r="18" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="365" cy="48" r="2" fill="#18181f"/>
+  <!-- Motion trail dots along path -->
+  <circle cx="90" cy="30" r="1.5" fill="#888898" opacity="0.3"/>
+  <circle cx="170" cy="28" r="1.5" fill="#888898" opacity="0.4"/>
+  <circle cx="280" cy="42" r="1.5" fill="#888898" opacity="0.5"/>
+  <!-- Timeline below -->
+  <line x1="30" y1="82" x2="375" y2="82" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <circle cx="43" cy="82" r="1.5" fill="#888898"/>
+  <circle cx="365" cy="82" r="1.5" fill="#888898"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Animate Shapes</span>
+                                        <span class="guide-index-desc">Morph between two SVG shapes and export self-contained animated SVGs with configurable easing, frame count, and timing.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/accessibility/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: Magnifying glass (Inspection/Audit) -->
+  <circle cx="75" cy="45" r="18" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="88" y1="58" x2="110" y2="80" stroke="#b8b8c6" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Inner lens highlight -->
+  <circle cx="75" cy="45" r="10" stroke="#b0b0be" stroke-width="0.8" stroke-dasharray="2 2"/>
+  <circle cx="110" cy="80" r="2.5" fill="#888898"/>
+  
+  <!-- Dashed connector -->
+  <line x1="130" y1="50" x2="170" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  
+  <!-- Center: Semantic Label / ARIA tag -->
+  <path d="M190,40 L255,40 L265,50 L255,60 L190,60 Z" stroke="#b0b0be" stroke-width="1.2"/>
+  <line x1="202" y1="50" x2="242" y2="50" stroke="#b0b0be" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="198" cy="50" r="1.5" fill="#888898"/>
+  
+  <!-- Dashed connector -->
+  <line x1="285" y1="50" x2="315" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  
+  <!-- Right: Checkmark (Validation) -->
+  <polyline points="335,52 350,65 380,30" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Subtle arc support -->
+  <path d="M320,75 Q352,85 385,75" stroke="#6a6a7a" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Accessibility</span>
+                                        <span class="guide-index-desc">Audit and fix SVG accessibility: add titles, descriptions, and ARIA roles so SVGs work correctly with screen readers and assistive technology.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/merge-documents/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Doc 1 (top-left) -->
+  <rect x="30" y="14" width="40" height="30" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <line x1="36" y1="22" x2="64" y2="22" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="36" y1="28" x2="58" y2="28" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="36" y1="34" x2="60" y2="34" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <!-- Doc 2 (bottom-left) -->
+  <rect x="30" y="56" width="40" height="30" rx="2" stroke="#b8b8c6" stroke-width="1.2"/>
+  <circle cx="50" cy="68" r="7" stroke="#6a6a7a" stroke-width="0.6"/>
+  <circle cx="50" cy="68" r="2" fill="#6a6a7a"/>
+  <!-- Doc 3 (middle-left) -->
+  <rect x="85" y="35" width="40" height="30" rx="2" stroke="#b0b0be" stroke-width="1"/>
+  <path d="M95,52 L100,42 L105,48 L112,40 L118,52" stroke="#6a6a7a" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Converging arrows -->
+  <path d="M72,30 Q120,30 155,48" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <path d="M72,70 Q120,70 155,52" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <path d="M126,50 L155,50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Merge point -->
+  <circle cx="160" cy="50" r="3" fill="#888898"/>
+  <!-- Arrow to result -->
+  <line x1="165" y1="50" x2="215" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="210,44 220,50 210,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Result: merged document -->
+  <rect x="235" y="18" width="65" height="64" rx="3" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- Combined content inside -->
+  <line x1="244" y1="28" x2="290" y2="28" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="244" y1="34" x2="282" y2="34" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="244" y1="42" x2="290" y2="42" stroke="#3e3e4c" stroke-width="0.3" stroke-dasharray="2 2"/>
+  <circle cx="260" cy="54" r="6" stroke="#6a6a7a" stroke-width="0.5"/>
+  <circle cx="260" cy="54" r="1.5" fill="#6a6a7a"/>
+  <path d="M275,60 L280,52 L285,56 L290,48 L295,60" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Size bracket -->
+  <line x1="316" y1="18" x2="316" y2="82" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="313" y1="18" x2="319" y2="18" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="313" y1="82" x2="319" y2="82" stroke="#888898" stroke-width="0.5" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Merge SVG Documents</span>
+                                        <span class="guide-index-desc">Combine multiple SVG documents into one using merge strategies, or import individual elements between documents.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/shapes-to-paths/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: shapes -->
+  <rect x="28" y="34" width="26" height="26" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="85" cy="47" r="14" stroke="#b8b8c6" stroke-width="1.5"/>
+  <polygon points="130,34 146,66 114,66" stroke="#b0b0be" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Dashed arrow -->
+  <line x1="160" y1="50" x2="230" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="224,44 234,50 224,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Transition dots -->
+  <circle cx="180" cy="50" r="1.5" fill="#888898"/>
+  <circle cx="195" cy="50" r="2" fill="#888898"/>
+  <circle cx="210" cy="50" r="1.5" fill="#888898"/>
+  <!-- Right: same shapes drawn as paths with visible control points -->
+  <!-- Rect as path -->
+  <path d="M258,34 L284,34 L284,60 L258,60 Z" stroke="#b8b8c6" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="258" cy="34" r="1.5" fill="#888898"/>
+  <circle cx="284" cy="34" r="1.5" fill="#888898"/>
+  <circle cx="284" cy="60" r="1.5" fill="#888898"/>
+  <circle cx="258" cy="60" r="1.5" fill="#888898"/>
+  <!-- Circle as path (with control points) -->
+  <path d="M330,33 C338,33 344,39 344,47 C344,55 338,61 330,61 C322,61 316,55 316,47 C316,39 322,33 330,33" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="330" cy="33" r="1.5" fill="#888898"/>
+  <circle cx="344" cy="47" r="1.5" fill="#888898"/>
+  <circle cx="330" cy="61" r="1.5" fill="#888898"/>
+  <circle cx="316" cy="47" r="1.5" fill="#888898"/>
+  <!-- Control point handles on circle -->
+  <line x1="330" y1="33" x2="336" y2="33" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <line x1="344" y1="47" x2="344" y2="41" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <line x1="330" y1="61" x2="324" y2="61" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <line x1="316" y1="47" x2="316" y2="53" stroke="#6a6a7a" stroke-width="0.4" stroke-linecap="round"/>
+  <!-- "d=" label hint -->
+  <line x1="252" y1="72" x2="350" y2="72" stroke="#6a6a7a" stroke-width="0.5" stroke-linecap="round"/>
+  <line x1="260" y1="78" x2="340" y2="78" stroke="#6a6a7a" stroke-width="0.3" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Convert Shapes to Paths</span>
+                                        <span class="guide-index-desc">Convert SVG shape elements - rect, circle, ellipse, line, polygon, polyline - to path elements for animation, morphing, and further optimization.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/markers-along-path/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Trail curve -->
+  <path d="M40,72 C 110,18 290,18 360,72" stroke="#b0b0be" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Faint baseline -->
+  <line x1="30" y1="92" x2="370" y2="92" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Endpoints (start / finish) emphasised -->
+  <circle cx="40"  cy="72" r="3.6" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="360" cy="72" r="3.6" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- 5 evenly-spaced markers along the curve (positions taken from getPointAtLength) -->
+  <circle cx="86"  cy="46" r="2.6" fill="#888898"/>
+  <circle cx="148" cy="29" r="2.6" fill="#888898"/>
+  <circle cx="200" cy="24" r="2.6" fill="#888898"/>
+  <circle cx="252" cy="29" r="2.6" fill="#888898"/>
+  <circle cx="314" cy="46" r="2.6" fill="#888898"/>
+  <!-- Length tick marks below the curve, suggesting measured spacing -->
+  <line x1="40"  y1="86" x2="40"  y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="120" y1="86" x2="120" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="200" y1="86" x2="200" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="280" y1="86" x2="280" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="360" y1="86" x2="360" y2="89" stroke="#6a6a7a" stroke-width="0.6"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Place Markers Along a Path</span>
+                                        <span class="guide-index-desc">Distribute markers, dots, or labels evenly along an SVG path using the path&#039;s length and getPointAtLength() - useful for trails, route maps, and animation guides.</span>                                    </span>
+                                </a>
+                            </li>
+                                                                                                                            <li class="guide-index-item">
+                                <a href="/guides/crop-to-content/">
+                                                                            <span class="guide-index-hero"><div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Loose original viewport (left): big dashed frame with content tucked in a corner -->
+  <rect x="40" y="18" width="120" height="64" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" rx="2"/>
+  <!-- Content in the bottom-right of the loose frame -->
+  <rect   x="118" y="56" width="28" height="18" rx="2" stroke="#b0b0be" stroke-width="1.3"/>
+  <circle cx="135" cy="49" r="6"                  stroke="#b0b0be" stroke-width="1.3"/>
+  <circle cx="125" cy="49" r="1.4" fill="#888898"/>
+  <!-- Anchor / corner ticks of the loose frame -->
+  <line x1="40"  y1="18" x2="44"  y2="18" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="40"  y1="18" x2="40"  y2="22" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="160" y1="82" x2="156" y2="82" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="160" y1="82" x2="160" y2="78" stroke="#6a6a7a" stroke-width="0.6"/>
+
+  <!-- Dashed flow arrow -->
+  <line x1="180" y1="50" x2="240" y2="50" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <polyline points="234,44 244,50 234,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Tight cropped viewport (right): frame hugging the content -->
+  <rect x="278" y="34" width="78" height="38" stroke="#b8b8c6" stroke-width="1.5" rx="2"/>
+  <rect   x="296" y="50" width="28" height="18" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="313" cy="43" r="6"                  stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="303" cy="43" r="1.4" fill="#888898"/>
+  <!-- Corner ticks on the tight frame -->
+  <line x1="278" y1="34" x2="282" y2="34" stroke="#888898" stroke-width="0.7"/>
+  <line x1="278" y1="34" x2="278" y2="38" stroke="#888898" stroke-width="0.7"/>
+  <line x1="356" y1="72" x2="352" y2="72" stroke="#888898" stroke-width="0.7"/>
+  <line x1="356" y1="72" x2="356" y2="68" stroke="#888898" stroke-width="0.7"/>
+
+  <!-- Faint baseline -->
+  <line x1="30" y1="92" x2="370" y2="92" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+</span>
+                                                                        <span class="guide-index-body">
+                                        <span class="guide-index-title">Crop SVG to its Content</span>
+                                        <span class="guide-index-desc">Trim an SVG&#039;s viewBox and dimensions to fit its actual content, removing whitespace from third-party files or after deleting elements.</span>                                    </span>
+                                </a>
+                            </li>
+                                                            </ul>
+            
+            <nav class="prev-next">
+            <a href="/morphing/exporting/">
+            <span class="label">Previous</span>
+            <span class="title">Exporting</span>
+        </a>
+                <a href="/guides/sanitize-uploads/" class="next">
+            <span class="label">Next</span>
+            <span class="title">Sanitize Uploads</span>
+        </a>
+    </nav>
+        </article>
+    </main>
+
+    </div>
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>

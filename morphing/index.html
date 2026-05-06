@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morphing - Atelier SVG</title>
+    <meta name="description" content="Morph between two SVG paths to create smooth shape transitions.">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/morphing/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Morphing - Atelier SVG">
+    <meta property="og:description" content="Morph between two SVG paths to create smooth shape transitions.">
+    <meta property="og:url" content="https://ateliersvg.com/morphing/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Morphing - Atelier SVG">
+    <meta name="twitter:description" content="Morph between two SVG paths to create smooth shape transitions.">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SVG",
+      "item": "https://ateliersvg.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Morphing",
+      "item": "https://ateliersvg.com/morphing/"
+    }  ]
+}
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="page-body">
+    <nav class="sidebar" id="sidebar">
+    <a href="/" class="site-brand">
+        <svg class="site-logo" viewBox="0 0 354 363" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+              <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+            </linearGradient>
+          </defs>
+          <use href="#logo" stroke="url(#logo-grad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <span class="site-brand-text"><span class="site-brand-atelier">Atelier</span> <span class="site-brand-svg">SVG</span></span>
+    </a>
+
+    <div class="nav-tree">
+                    <div class="section">
+                <a href="/installation/" class="section-title">Installation</a>
+            </div>
+                    <div class="section">
+                <a href="/quick-start/" class="section-title">Quick Start</a>
+            </div>
+                                        <div class="section">
+                <a href="/document/" class="section-title">Document</a>
+                            </div>
+                                <div class="section">
+                <a href="/elements/" class="section-title">Elements</a>
+                            </div>
+                                <div class="section">
+                <a href="/path/" class="section-title">Paths</a>
+                            </div>
+                                <div class="section">
+                <a href="/styling/" class="section-title">Styling</a>
+                            </div>
+                                <div class="section">
+                <a href="/optimization/" class="section-title">Optimization</a>
+                            </div>
+                                <div class="section is-open">
+                <a href="/morphing/" class="section-title active">Morphing</a>
+                                    <ul class="links">
+                                                                                                                                                                <li><a href="/morphing/how-it-works/">How It Works</a></li>
+                                                                                                                <li><a href="/morphing/exporting/">Exporting</a></li>
+                                                                        </ul>
+                            </div>
+                                <div class="section">
+                <a href="/guides/" class="section-title">Guides</a>
+                            </div>
+            </div>
+</nav>
+
+    <main class="main" id="main-content" tabindex="-1">
+        <article class="page-content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+                        <a href="/">SVG</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <span aria-current="page">Morphing</span>
+            </nav>
+            <div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <rect x="25" y="30" width="40" height="40" rx="2" stroke="#b8b8c6" stroke-width="1.5"/>
+  <rect x="110" y="28" width="40" height="40" rx="8" stroke="#b0b0be" stroke-width="1.2" opacity="0.6"/>
+  <rect x="195" y="26" width="40" height="40" rx="15" stroke="#b0b0be" stroke-width="1.2" opacity="0.7"/>
+  <circle cx="300" cy="48" r="20" stroke="#b0b0be" stroke-width="1.2" opacity="0.8"/>
+  <circle cx="370" cy="48" r="20" stroke="#b8b8c6" stroke-width="1.5"/>
+  <line x1="70" y1="50" x2="340" y2="50" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="4 3"/>
+  <circle cx="45" cy="50" r="2" fill="#888898"/>
+  <circle cx="130" cy="48" r="2" fill="#888898" opacity="0.6"/>
+  <circle cx="215" cy="46" r="2" fill="#888898" opacity="0.7"/>
+  <circle cx="300" cy="48" r="2" fill="#888898" opacity="0.8"/>
+  <circle cx="370" cy="48" r="2" fill="#888898"/>
+</svg>
+</div>
+            <h1>Morphing</h1>
+<p>Morph between two SVG paths to create smooth shape transitions. The morphing system handles path normalization, segment matching, and interpolation automatically.</p>
+<span class="heading-target" id="quick-start" aria-hidden="true"></span><h2 data-toc-id="quick-start"><a href="#quick-start" class="heading-anchor" aria-label="Link to this section">#</a>Quick Start</h2>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Morphing\Morph</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Path\Data</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$start</span> <span class="polar-operator">=</span> <span class="polar-constant">Data</span><span class="polar-operator">::</span><span class="polar-function-call">parse</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;M 0 0 L 100 0 L 100 100 L 0 100 Z&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$end</span>   <span class="polar-operator">=</span> <span class="polar-constant">Data</span><span class="polar-operator">::</span><span class="polar-function-call">parse</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;M 50 0 L 100 50 L 50 100 L 0 50 Z&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Get a single interpolated path at 50%</span>
+<span class="polar-variable">$mid</span> <span class="polar-operator">=</span> <span class="polar-constant">Morph</span><span class="polar-operator">::</span><span class="polar-function-call">between</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">,</span> <span class="polar-variable">$end</span><span class="polar-punctuation">,</span> <span class="polar-number">0.5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="the-morph-facade" aria-hidden="true"></span><h2 data-toc-id="the-morph-facade"><a href="#the-morph-facade" class="heading-anchor" aria-label="Link to this section">#</a>The Morph Facade</h2>
+<p><code>Atelier\Svg\Morphing\Morph</code> provides three static entry points.</p>
+<span class="heading-target" id="interpolate-at-a-point" aria-hidden="true"></span><h3 data-toc-id="interpolate-at-a-point"><a href="#interpolate-at-a-point" class="heading-anchor" aria-label="Link to this section">#</a>Interpolate at a Point</h3>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$path</span> <span class="polar-operator">=</span> <span class="polar-constant">Morph</span><span class="polar-operator">::</span><span class="polar-function-call">between</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">,</span> <span class="polar-variable">$end</span><span class="polar-punctuation">,</span> <span class="polar-number">0.3</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;ease-in-out&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>The <code>$t</code> parameter ranges from <code>0.0</code> (start shape) to <code>1.0</code> (end shape). An optional easing function controls the interpolation curve.</p>
+<span class="heading-target" id="generate-animation-frames" aria-hidden="true"></span><h3 data-toc-id="generate-animation-frames"><a href="#generate-animation-frames" class="heading-anchor" aria-label="Link to this section">#</a>Generate Animation Frames</h3>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$frames</span> <span class="polar-operator">=</span> <span class="polar-constant">Morph</span><span class="polar-operator">::</span><span class="polar-function-call">frames</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">,</span> <span class="polar-variable">$end</span><span class="polar-punctuation">,</span> <span class="polar-number">60</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;ease-in-out&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-comment">// Returns an array of 60 Data objects</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="builder-pattern" aria-hidden="true"></span><h3 data-toc-id="builder-pattern"><a href="#builder-pattern" class="heading-anchor" aria-label="Link to this section">#</a>Builder Pattern</h3>
+<p>For more control, use the fluent builder via <code>Morph::create()</code>:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$frames</span> <span class="polar-operator">=</span> <span class="polar-constant">Morph</span><span class="polar-operator">::</span><span class="polar-function-call">create</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">from</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">to</span><span class="polar-punctuation">(</span><span class="polar-variable">$end</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">withDuration</span><span class="polar-punctuation">(</span><span class="polar-number">2000</span><span class="polar-punctuation">,</span> <span class="polar-number">60</span><span class="polar-punctuation">)</span>   <span class="polar-comment">// 2 seconds at 60fps = 120 frames</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">withEasing</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;ease-out-cubic&#039;</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">generate</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>The builder returns a <code>MorphingBuilder</code> instance with these methods:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from(Data $path)</code></td>
+<td>Set the starting path</td>
+</tr>
+<tr>
+<td><code>to(Data $path)</code></td>
+<td>Set the ending path</td>
+</tr>
+<tr>
+<td><code>withFrames(int $count)</code></td>
+<td>Set the number of frames directly</td>
+</tr>
+<tr>
+<td><code>withDuration(int $ms, int $fps)</code></td>
+<td>Calculate frame count from duration and framerate</td>
+</tr>
+<tr>
+<td><code>withEasing(string|Closure $easing)</code></td>
+<td>Set the easing function</td>
+</tr>
+<tr>
+<td><code>generate()</code></td>
+<td>Generate all frames as <code>Data[]</code></td>
+</tr>
+<tr>
+<td><code>at(float $t)</code></td>
+<td>Get a single interpolated frame</td>
+</tr>
+</tbody>
+</table>
+<span class="heading-target" id="shapemorpher" aria-hidden="true"></span><h2 data-toc-id="shapemorpher"><a href="#shapemorpher" class="heading-anchor" aria-label="Link to this section">#</a>ShapeMorpher</h2>
+<p><code>Morph</code> delegates to <code>ShapeMorpher</code>, which orchestrates the three-stage pipeline (normalize, match, interpolate). You can use it directly for lower-level access:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Morphing\ShapeMorpher</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$morpher</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">ShapeMorpher</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$result</span>  <span class="polar-operator">=</span> <span class="polar-variable">$morpher</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">morph</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">,</span> <span class="polar-variable">$end</span><span class="polar-punctuation">,</span> <span class="polar-number">0.5</span><span class="polar-punctuation">,</span> <span class="polar-string">&#039;ease-in&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Inspect intermediate steps</span>
+<span class="polar-variable">$normalized</span> <span class="polar-operator">=</span> <span class="polar-variable">$morpher</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">normalize</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">[</span><span class="polar-variable">$matchedA</span><span class="polar-punctuation">,</span> <span class="polar-variable">$matchedB</span><span class="polar-punctuation">]</span> <span class="polar-operator">=</span> <span class="polar-variable">$morpher</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">match</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">,</span> <span class="polar-variable">$end</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="easing-functions" aria-hidden="true"></span><h2 data-toc-id="easing-functions"><a href="#easing-functions" class="heading-anchor" aria-label="Link to this section">#</a>Easing Functions</h2>
+<p>The following named easing functions are available:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>linear</code></td>
+<td>Constant speed</td>
+</tr>
+<tr>
+<td><code>ease-in</code></td>
+<td>Slow start (quadratic)</td>
+</tr>
+<tr>
+<td><code>ease-out</code></td>
+<td>Slow end (quadratic)</td>
+</tr>
+<tr>
+<td><code>ease-in-out</code></td>
+<td>Slow start and end (quadratic)</td>
+</tr>
+<tr>
+<td><code>ease-in-cubic</code></td>
+<td>Slow start (cubic)</td>
+</tr>
+<tr>
+<td><code>ease-out-cubic</code></td>
+<td>Slow end (cubic)</td>
+</tr>
+<tr>
+<td><code>ease-in-out-cubic</code></td>
+<td>Slow start and end (cubic)</td>
+</tr>
+<tr>
+<td><code>ease-out-elastic</code></td>
+<td>Bouncy overshoot</td>
+</tr>
+<tr>
+<td><code>ease-in-back</code></td>
+<td>Pulls back before moving forward</td>
+</tr>
+<tr>
+<td><code>ease-out-back</code></td>
+<td>Overshoots then settles</td>
+</tr>
+</tbody>
+</table>
+<p>You can also pass a custom <code>Closure</code> as the easing function:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$frames</span> <span class="polar-operator">=</span> <span class="polar-constant">Morph</span><span class="polar-operator">::</span><span class="polar-function-call">create</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">from</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">to</span><span class="polar-punctuation">(</span><span class="polar-variable">$end</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">withFrames</span><span class="polar-punctuation">(</span><span class="polar-number">60</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">withEasing</span><span class="polar-punctuation">(</span><span class="polar-punctuation">fn</span><span class="polar-punctuation">(</span><span class="polar-constant">float</span> <span class="polar-variable">$t</span><span class="polar-punctuation">)</span><span class="polar-punctuation">:</span> <span class="polar-constant">float</span> <span class="polar-operator">=&gt;</span> <span class="polar-variable">$t</span> <span class="polar-operator">*</span> <span class="polar-variable">$t</span> <span class="polar-operator">*</span> <span class="polar-variable">$t</span><span class="polar-punctuation">)</span>
+    <span class="polar-operator">-&gt;</span><span class="polar-function-call">generate</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>Or use <code>MorphingInterpolator::cubicBezierEasing()</code> to create a CSS-style cubic bezier:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Morphing\MorphingInterpolator</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$easing</span> <span class="polar-operator">=</span> <span class="polar-constant">MorphingInterpolator</span><span class="polar-operator">::</span><span class="polar-function-call">cubicBezierEasing</span><span class="polar-punctuation">(</span><span class="polar-number">0.25</span><span class="polar-punctuation">,</span> <span class="polar-number">0.1</span><span class="polar-punctuation">,</span> <span class="polar-number">0.25</span><span class="polar-punctuation">,</span> <span class="polar-number">1.0</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$path</span> <span class="polar-operator">=</span> <span class="polar-constant">Morph</span><span class="polar-operator">::</span><span class="polar-function-call">between</span><span class="polar-punctuation">(</span><span class="polar-variable">$start</span><span class="polar-punctuation">,</span> <span class="polar-variable">$end</span><span class="polar-punctuation">,</span> <span class="polar-number">0.5</span><span class="polar-punctuation">,</span> <span class="polar-variable">$easing</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<hr />
+<p>See also:</p>
+<ul>
+<li><a href="how-it-works/">How It Works</a>: the normalization, matching, and interpolation pipeline</li>
+<li><a href="exporting/">Exporting</a>: export animations to SMIL, CSS, JavaScript, and more</li>
+<li><a href="../elements/animation/">Animation elements</a>: SMIL animation elements and builder</li>
+</ul>
+
+
+            
+            <nav class="prev-next">
+            <a href="/optimization/custom-pass/">
+            <span class="label">Previous</span>
+            <span class="title">Custom Pass</span>
+        </a>
+                <a href="/morphing/how-it-works/" class="next">
+            <span class="label">Next</span>
+            <span class="title">How It Works</span>
+        </a>
+    </nav>
+        </article>
+    </main>
+
+    <aside class="page-toc">
+    <div class="nav-tree">
+        <div class="section">
+            <span class="section-title">On this page</span>
+            <ul class="links">
+                                    <li class="toc-h2">
+                        <a href="#quick-start">Quick Start</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#the-morph-facade">The Morph Facade</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#shapemorpher">ShapeMorpher</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#easing-functions">Easing Functions</a>
+                    </li>
+                            </ul>
+        </div>
+    </div>
+</aside>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>

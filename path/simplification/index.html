@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplification - Paths - Atelier SVG</title>
+    <meta name="description" content="Atelier SVG includes algorithms for reducing the number of points in a path while preserving its visual shape.">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/path/simplification/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Simplification - Paths - Atelier SVG">
+    <meta property="og:description" content="Atelier SVG includes algorithms for reducing the number of points in a path while preserving its visual shape.">
+    <meta property="og:url" content="https://ateliersvg.com/path/simplification/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Simplification - Paths - Atelier SVG">
+    <meta name="twitter:description" content="Atelier SVG includes algorithms for reducing the number of points in a path while preserving its visual shape.">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SVG",
+      "item": "https://ateliersvg.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Paths",
+      "item": "https://ateliersvg.com/path/"
+    },{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Simplification",
+      "item": "https://ateliersvg.com/path/simplification/"
+    }  ]
+}
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="page-body">
+    <nav class="sidebar" id="sidebar">
+    <a href="/" class="site-brand">
+        <svg class="site-logo" viewBox="0 0 354 363" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+              <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+            </linearGradient>
+          </defs>
+          <use href="#logo" stroke="url(#logo-grad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <span class="site-brand-text"><span class="site-brand-atelier">Atelier</span> <span class="site-brand-svg">SVG</span></span>
+    </a>
+
+    <div class="nav-tree">
+                    <div class="section">
+                <a href="/installation/" class="section-title">Installation</a>
+            </div>
+                    <div class="section">
+                <a href="/quick-start/" class="section-title">Quick Start</a>
+            </div>
+                                        <div class="section">
+                <a href="/document/" class="section-title">Document</a>
+                            </div>
+                                <div class="section">
+                <a href="/elements/" class="section-title">Elements</a>
+                            </div>
+                                <div class="section is-open">
+                <a href="/path/" class="section-title active">Paths</a>
+                                    <ul class="links">
+                                                                                                                                                                <li><a href="/path/building/">Building</a></li>
+                                                                                                                <li><a href="/path/geometry/">Geometry</a></li>
+                                                                                                                <li><a href="/path/analysis/">Analysis</a></li>
+                                                                                                                <li><a href="/path/simplification/" class="active">Simplification</a></li>
+                                                                                                                <li><a href="/path/transforms/">Transforms</a></li>
+                                                                        </ul>
+                            </div>
+                                <div class="section">
+                <a href="/styling/" class="section-title">Styling</a>
+                            </div>
+                                <div class="section">
+                <a href="/optimization/" class="section-title">Optimization</a>
+                            </div>
+                                <div class="section">
+                <a href="/morphing/" class="section-title">Morphing</a>
+                            </div>
+                                <div class="section">
+                <a href="/guides/" class="section-title">Guides</a>
+                            </div>
+            </div>
+</nav>
+
+    <main class="main" id="main-content" tabindex="-1">
+        <article class="page-content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+                        <a href="/">SVG</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <a href="/path/">Paths</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <span aria-current="page">Simplification</span>
+            </nav>
+            <div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: wavy curve with 10 dots -->
+  <path d="M30,50 Q45,25 60,50 Q75,75 90,50 Q105,25 120,50 Q135,75 150,50 Q165,25 180,50" stroke="#b0b0be" stroke-width="1" stroke-linecap="round"/>
+  <circle cx="30" cy="50" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="45" cy="37" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="60" cy="50" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="75" cy="63" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="90" cy="50" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="105" cy="37" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="120" cy="50" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="135" cy="63" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="150" cy="50" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <circle cx="180" cy="50" r="2" fill="#18181f" stroke="#b0b0be" stroke-width="0.8"/>
+  <!-- Arrow -->
+  <line x1="195" y1="50" x2="215" y2="50" stroke="#888898" stroke-width="1" stroke-linecap="round"/>
+  <polyline points="210,44 220,50 210,56" stroke="#888898" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right: simplified curve with 4 dots -->
+  <path d="M240,50 Q275,25 310,50 Q345,75 370,50" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="240" cy="50" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="290" cy="38" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="330" cy="62" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="370" cy="50" r="3" fill="#18181f" stroke="#b8b8c6" stroke-width="1.5"/>
+  <!-- Faint removed dots -->
+  <circle cx="255" cy="40" r="1.5" stroke="#6a6a7a" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="270" cy="34" r="1.5" stroke="#6a6a7a" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="310" cy="50" r="1.5" stroke="#6a6a7a" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="350" cy="58" r="1.5" stroke="#6a6a7a" stroke-width="0.5" opacity="0.3"/>
+</svg>
+</div>
+            <h1>Simplification</h1>
+<p>Atelier SVG includes algorithms for reducing the number of points in a path while preserving its visual shape. This is useful for optimizing file size and improving rendering performance.</p>
+<span class="heading-target" id="simplifierinterface" aria-hidden="true"></span><h2 data-toc-id="simplifierinterface"><a href="#simplifierinterface" class="heading-anchor" aria-label="Link to this section">#</a>SimplifierInterface</h2>
+<p>All simplifiers implement <code>Atelier\Svg\Path\Simplifier\SimplifierInterface</code>:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-keyword">public</span> <span class="polar-keyword-declaration">function</span> <span class="polar-function-definition">simplify</span><span class="polar-punctuation">(</span><span class="polar-constant">Data</span> <span class="polar-variable-parameter">$pathData</span><span class="polar-punctuation">,</span> <span class="polar-constant">float</span> <span class="polar-variable-parameter">$tolerance</span><span class="polar-punctuation">)</span><span class="polar-punctuation">:</span> <span class="polar-constant">Data</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>The method returns a new <code>Data</code> object: the original is not modified. The <code>$tolerance</code> parameter controls how aggressively points are removed. A tolerance of zero returns the original path unchanged. Negative values throw <code>InvalidArgumentException</code>.</p>
+<p>Non-line segments (curves, arcs, close commands) are preserved as-is. Only sequences of <code>MoveTo</code> + <code>LineTo</code> segments (polylines) are simplified.</p>
+<span class="heading-target" id="simplifier-ramer-douglas-peucker" aria-hidden="true"></span><h2 data-toc-id="simplifier-ramer-douglas-peucker"><a href="#simplifier-ramer-douglas-peucker" class="heading-anchor" aria-label="Link to this section">#</a>Simplifier (Ramer-Douglas-Peucker)</h2>
+<p><code>Atelier\Svg\Path\Simplifier\Simplifier</code> uses the Ramer-Douglas-Peucker algorithm. It recursively finds the point farthest from the line between the start and end, keeping it only if its perpendicular distance exceeds the tolerance.</p>
+<p>The tolerance represents the maximum allowed perpendicular distance (in SVG user units) from a removed point to the simplified line.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Path\Simplifier\Simplifier</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Path\PathParser</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable-parameter">$parser</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">PathParser</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable-parameter">$data</span> <span class="polar-operator">=</span> <span class="polar-variable-parameter">$parser</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">parse</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;M 0,0 L 1,0.1 L 2,0 L 3,0.1 L 4,0&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable-parameter">$simplifier</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">Simplifier</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable-parameter">$simplified</span> <span class="polar-operator">=</span> <span class="polar-variable-parameter">$simplifier</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">simplify</span><span class="polar-punctuation">(</span><span class="polar-variable-parameter">$data</span><span class="polar-punctuation">,</span> <span class="polar-constant">tolerance</span><span class="polar-punctuation">:</span> <span class="polar-number">0.2</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Points within 0.2 units of the straight line are removed</span>
+<span class="polar-keyword-control">echo</span> <span class="polar-variable-parameter">$simplified</span><span class="polar-punctuation">;</span> <span class="polar-comment">// &quot;M 0,0 L 4,0&quot;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>Best suited for paths where preserving endpoints is important.</p>
+<span class="heading-target" id="visvalingamwhyattsimplifier" aria-hidden="true"></span><h2 data-toc-id="visvalingamwhyattsimplifier"><a href="#visvalingamwhyattsimplifier" class="heading-anchor" aria-label="Link to this section">#</a>VisvalingamWhyattSimplifier</h2>
+<p><code>Atelier\Svg\Path\Simplifier\VisvalingamWhyattSimplifier</code> uses the Visvalingam-Whyatt algorithm. It iteratively removes the point that forms the smallest triangle with its neighbors, stopping when all remaining triangles exceed the area tolerance.</p>
+<p>The tolerance represents the minimum triangle area (in square SVG user units) that a point must contribute to be retained.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Path\Simplifier\VisvalingamWhyattSimplifier</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable-parameter">$simplifier</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">VisvalingamWhyattSimplifier</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable-parameter">$simplified</span> <span class="polar-operator">=</span> <span class="polar-variable-parameter">$simplifier</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">simplify</span><span class="polar-punctuation">(</span><span class="polar-variable-parameter">$data</span><span class="polar-punctuation">,</span> <span class="polar-constant">tolerance</span><span class="polar-punctuation">:</span> <span class="polar-number">5.0</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>Tends to produce more visually pleasing results than RDP for cartographic and organic shapes.</p>
+<span class="heading-target" id="collinearpointremover" aria-hidden="true"></span><h2 data-toc-id="collinearpointremover"><a href="#collinearpointremover" class="heading-anchor" aria-label="Link to this section">#</a>CollinearPointRemover</h2>
+<p><code>Atelier\Svg\Path\Simplifier\CollinearPointRemover</code> removes points that are nearly collinear with their neighbors. For each interior point, it computes the perpendicular distance to the line formed by the previous and next points. Points within tolerance are dropped.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Path\Simplifier\CollinearPointRemover</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable-parameter">$simplifier</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">CollinearPointRemover</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable-parameter">$simplified</span> <span class="polar-operator">=</span> <span class="polar-variable-parameter">$simplifier</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">simplify</span><span class="polar-punctuation">(</span><span class="polar-variable-parameter">$data</span><span class="polar-punctuation">,</span> <span class="polar-constant">tolerance</span><span class="polar-punctuation">:</span> <span class="polar-number">0.5</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>This is the fastest of the three algorithms. Use it as a first pass to strip obviously redundant points before applying a more sophisticated simplifier.</p>
+<span class="heading-target" id="choosing-a-tolerance" aria-hidden="true"></span><h2 data-toc-id="choosing-a-tolerance"><a href="#choosing-a-tolerance" class="heading-anchor" aria-label="Link to this section">#</a>Choosing a Tolerance</h2>
+<table>
+<thead>
+<tr>
+<th>Tolerance</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>No simplification (original path returned)</td>
+</tr>
+<tr>
+<td>0.1 - 1.0</td>
+<td>Light cleanup, nearly imperceptible</td>
+</tr>
+<tr>
+<td>1.0 - 5.0</td>
+<td>Moderate reduction, slight smoothing</td>
+</tr>
+<tr>
+<td>5.0+</td>
+<td>Aggressive reduction, visible simplification</td>
+</tr>
+</tbody>
+</table>
+<p>The right value depends on the scale of your coordinates and the level of detail required.</p>
+<span class="heading-target" id="see-also" aria-hidden="true"></span><h2 data-toc-id="see-also"><a href="#see-also" class="heading-anchor" aria-label="Link to this section">#</a>See also</h2>
+<ul>
+<li><a href="../">Path data model</a>: Data, segments, parser</li>
+<li><a href="../analysis/">Path analysis</a>: measure paths before and after simplification</li>
+<li><a href="../../optimization/">Optimization</a>: broader optimization strategies</li>
+</ul>
+
+            <nav class="prev-next">
+            <a href="/path/analysis/">
+            <span class="label">Previous</span>
+            <span class="title">Analysis</span>
+        </a>
+                <a href="/path/transforms/" class="next">
+            <span class="label">Next</span>
+            <span class="title">Transforms</span>
+        </a>
+    </nav>
+        </article>
+    </main>
+
+        <aside class="page-toc">
+    <div class="nav-tree">
+        <div class="section">
+            <span class="section-title">On this page</span>
+            <ul class="links">
+                                    <li class="toc-h2">
+                        <a href="#simplifierinterface">SimplifierInterface</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#simplifier-ramer-douglas-peucker">Simplifier (Ramer-Douglas-Peucker)</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#visvalingamwhyattsimplifier">VisvalingamWhyattSimplifier</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#collinearpointremover">CollinearPointRemover</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#choosing-a-tolerance">Choosing a Tolerance</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#see-also">See also</a>
+                    </li>
+                            </ul>
+        </div>
+    </div>
+</aside>
+    </div>
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>

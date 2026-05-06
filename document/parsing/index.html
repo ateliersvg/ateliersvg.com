@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsing - Document - Atelier SVG</title>
+    <meta name="description" content="Atelier SVG provides two approaches for loading SVG content: the DomLoader (high-level) and the DomParser (low-level with parse profiles).">
+    <meta name="author" content="Simon André">
+    <link rel="canonical" href="https://ateliersvg.com/document/parsing/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Parsing - Document - Atelier SVG">
+    <meta property="og:description" content="Atelier SVG provides two approaches for loading SVG content: the DomLoader (high-level) and the DomParser (low-level with parse profiles).">
+    <meta property="og:url" content="https://ateliersvg.com/document/parsing/">
+    <meta property="og:site_name" content="Atelier SVG">
+    <meta property="og:locale" content="en_US">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Parsing - Document - Atelier SVG">
+    <meta name="twitter:description" content="Atelier SVG provides two approaches for loading SVG content: the DomLoader (high-level) and the DomParser (low-level with parse profiles).">
+
+    <link rel="stylesheet" href="/assets/app.css">
+    <link rel="stylesheet" href="/assets/highlight.css">
+
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('light');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "SVG",
+      "item": "https://ateliersvg.com/"
+    },{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Document",
+      "item": "https://ateliersvg.com/document/"
+    },{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Parsing",
+      "item": "https://ateliersvg.com/document/parsing/"
+    }  ]
+}
+</script>
+    <meta name="theme-color" content="#1e1e2e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/assets/favicons/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#143343">
+
+    <meta property="og:image" content="https://ateliersvg.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atelier SVG - The SVG toolkit for PHP">
+    <meta name="twitter:image" content="https://ateliersvg.com/assets/og-image.png">
+    <noscript><style>.landing-logo path{stroke-dashoffset:0!important;fill:currentColor!important;stroke-width:0!important}.landing-title,.landing-hero-sub,.landing-promise,.landing-scroll-hint,.landing-install{animation:none!important;opacity:1!important}</style></noscript>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<svg style="display:none" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="logo" viewBox="0 0 354 363" style="overflow: visible;">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M94 130.04 142.695 6.514C103.469 14.98 86.877 40.825 82.5 76.655c-2.586 21.17 2.918 40.729 11.5 53.385M139.5 179c-14.621-11.562-35.038-33.532-45.5-48.96L37.699 268.641 25.5 280.372a159 159 0 0 0 5.429 5.171L0 362.757h72l15.72-43.28c7.43 2.786 15.19 5.223 23.28 7.33l-11 35.95h72.5c41.112-3.284 74.111-16.921 95.538-38.442L282 362.757h72L212.113 8.531C225.774 5.04 241.094 3.257 258 3.257h-48l2.113 5.274C188.198 14.644 169.365 25.997 156 42.203c-19.5 23.967-24 50.93-12 71.9 3.285 5.741 7.47 11.033 12.523 15.937zm0 0c16 10 49 25 49 25s33 11.5 33 34.5c0 32.551-32.5 38.876-74.5 37.378-14.395-.685-27.85-3.559-40.366-8.48zm17.023-48.96L177 73.66l31.287 86.143c-22.087-8.221-39.489-17.848-51.764-29.763m51.764 29.763q3.048 1.134 6.213 2.233 81 29.21 81 94.369c0 27.073-9.8 50.17-27.462 67.91zM106.634 267.398C91.763 261.551 78.218 252.813 66 241.426l-28.301 27.215-6.77 16.902c16.1 14.626 35.03 25.775 56.79 33.934zM142.695 6.514 144 0h31.5c-11.851 0-22.84 4.364-32.805 6.514"/>
+    </symbol>
+  </defs>
+</svg>
+    <div class="site-utils">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/ateliersvg/svg" class="site-utils-icon" aria-label="GitHub repository" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+        <button class="nav-toggle" onclick="toggleNav()" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg viewBox="0 0 18 18" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <line x1="2" y1="4.5" x2="16" y2="4.5"/>
+                <line x1="2" y1="9"   x2="16" y2="9"/>
+                <line x1="2" y1="13.5" x2="16" y2="13.5"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="page-body">
+    <nav class="sidebar" id="sidebar">
+    <a href="/" class="site-brand">
+        <svg class="site-logo" viewBox="0 0 354 363" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="var(--logo-grad-from)"/>
+              <stop offset="100%" stop-color="var(--logo-grad-to)"/>
+            </linearGradient>
+          </defs>
+          <use href="#logo" stroke="url(#logo-grad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <span class="site-brand-text"><span class="site-brand-atelier">Atelier</span> <span class="site-brand-svg">SVG</span></span>
+    </a>
+
+    <div class="nav-tree">
+                    <div class="section">
+                <a href="/installation/" class="section-title">Installation</a>
+            </div>
+                    <div class="section">
+                <a href="/quick-start/" class="section-title">Quick Start</a>
+            </div>
+                                        <div class="section is-open">
+                <a href="/document/" class="section-title active">Document</a>
+                                    <ul class="links">
+                                                                                                                                                                <li><a href="/document/creating/">Creating</a></li>
+                                                                                                                <li><a href="/document/parsing/" class="active">Parsing</a></li>
+                                                                                                                <li><a href="/document/validation/">Validation</a></li>
+                                                                                                                <li><a href="/document/sanitization/">Sanitization</a></li>
+                                                                                                                <li><a href="/document/exporting/">Exporting</a></li>
+                                                                        </ul>
+                            </div>
+                                <div class="section">
+                <a href="/elements/" class="section-title">Elements</a>
+                            </div>
+                                <div class="section">
+                <a href="/path/" class="section-title">Paths</a>
+                            </div>
+                                <div class="section">
+                <a href="/styling/" class="section-title">Styling</a>
+                            </div>
+                                <div class="section">
+                <a href="/optimization/" class="section-title">Optimization</a>
+                            </div>
+                                <div class="section">
+                <a href="/morphing/" class="section-title">Morphing</a>
+                            </div>
+                                <div class="section">
+                <a href="/guides/" class="section-title">Guides</a>
+                            </div>
+            </div>
+</nav>
+
+    <main class="main" id="main-content" tabindex="-1">
+        <article class="page-content">
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+                        <a href="/">SVG</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <a href="/document/">Document</a>
+            <span class="sep" aria-hidden="true">/</span>
+                                <span aria-current="page">Parsing</span>
+            </nav>
+            <div class="page-hero">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" preserveAspectRatio="xMidYMid meet" fill="none">
+  <!-- Left: XML angle brackets -->
+  <polyline points="65,30 30,50 65,70" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="95,30 130,50 95,70" stroke="#b8b8c6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="72" y1="24" x2="88" y2="76" stroke="#6a6a7a" stroke-width="0.8" stroke-linecap="round"/>
+  <circle cx="30" cy="50" r="2" fill="#888898"/>
+  <circle cx="130" cy="50" r="2" fill="#888898"/>
+  <!-- Dashed connector -->
+  <line x1="145" y1="50" x2="195" y2="50" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <!-- Center-right: tree root -->
+  <circle cx="230" cy="30" r="6" stroke="#b8b8c6" stroke-width="1.5"/>
+  <circle cx="230" cy="30" r="2" fill="#18181f"/>
+  <!-- Branches -->
+  <line x1="226" y1="36" x2="190" y2="62" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <line x1="230" y1="36" x2="230" y2="62" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <line x1="234" y1="36" x2="270" y2="62" stroke="#3e3e4c" stroke-width="0.8" stroke-dasharray="4 3" stroke-linecap="round"/>
+  <!-- Child nodes -->
+  <circle cx="190" cy="66" r="4.5" stroke="#b0b0be" stroke-width="1.2"/>
+  <circle cx="230" cy="66" r="4.5" stroke="#b0b0be" stroke-width="1.2"/>
+  <circle cx="270" cy="66" r="4.5" stroke="#b0b0be" stroke-width="1.2"/>
+  <!-- Far right: extra detail -->
+  <circle cx="340" cy="35" r="3" stroke="#888898" stroke-width="1"/>
+  <circle cx="365" cy="50" r="3" stroke="#888898" stroke-width="1"/>
+  <line x1="343" y1="37" x2="362" y2="48" stroke="#3e3e4c" stroke-width="0.6" stroke-dasharray="3 2" stroke-linecap="round"/>
+  <circle cx="340" cy="70" r="2" stroke="#6a6a7a" stroke-width="0.6"/>
+  <line x1="343" y1="52" x2="338" y2="68" stroke="#3e3e4c" stroke-width="0.5" stroke-dasharray="3 2" stroke-linecap="round"/>
+</svg>
+</div>
+            <h1>Parsing</h1>
+<p>Atelier SVG provides two approaches for loading SVG content: the <code>DomLoader</code> (high-level) and the <code>DomParser</code> (low-level with parse profiles).</p>
+<span class="heading-target" id="loading-with-the-svg-facade" aria-hidden="true"></span><h2 data-toc-id="loading-with-the-svg-facade"><a href="#loading-with-the-svg-facade" class="heading-anchor" aria-label="Link to this section">#</a>Loading with the Svg Facade</h2>
+<p>The simplest way to load SVGs:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Svg</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// From a file</span>
+<span class="polar-variable">$svg</span> <span class="polar-operator">=</span> <span class="polar-constant">Svg</span><span class="polar-operator">::</span><span class="polar-function-call">load</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;path/to/icon.svg&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// From a string</span>
+<span class="polar-variable">$svg</span> <span class="polar-operator">=</span> <span class="polar-constant">Svg</span><span class="polar-operator">::</span><span class="polar-function-call">fromString</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;&lt;svg width=&quot;100&quot; height=&quot;100&quot;&gt;&lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;40&quot;/&gt;&lt;/svg&gt;&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>Both methods use <code>DomLoader</code> internally and return an <code>Svg</code> instance.</p>
+<span class="heading-target" id="domloader" aria-hidden="true"></span><h2 data-toc-id="domloader"><a href="#domloader" class="heading-anchor" aria-label="Link to this section">#</a>DomLoader</h2>
+<p><code>DomLoader</code> implements <code>LoaderInterface</code> and converts SVG content into a <code>Document</code> using PHP's DOM extension.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Loader\DomLoader</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$loader</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">DomLoader</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Load from a string</span>
+<span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-variable">$loader</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">loadFromString</span><span class="polar-punctuation">(</span><span class="polar-variable">$svgContent</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Load from a file (throws RuntimeException if unreadable)</span>
+<span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-variable">$loader</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">loadFromFile</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;path/to/image.svg&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<p>You can pass a custom loader to the facade:</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$svg</span> <span class="polar-operator">=</span> <span class="polar-constant">Svg</span><span class="polar-operator">::</span><span class="polar-function-call">load</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;icon.svg&#039;</span><span class="polar-punctuation">,</span> <span class="polar-variable">$customLoader</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="domparser" aria-hidden="true"></span><h2 data-toc-id="domparser"><a href="#domparser" class="heading-anchor" aria-label="Link to this section">#</a>DomParser</h2>
+<p><code>DomParser</code> is the lower-level parser that converts raw SVG XML into the library's element tree. It supports parse profiles and security protections.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Parser\DomParser</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Parser\ParseProfile</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$parser</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">DomParser</span><span class="polar-punctuation">(</span><span class="polar-constant">ParseProfile</span><span class="polar-operator">::</span><span class="polar-constant">STRICT</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-variable">$parser</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">parse</span><span class="polar-punctuation">(</span><span class="polar-variable">$svgString</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Or parse from a file directly</span>
+<span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-variable">$parser</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">parseFile</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;path/to/icon.svg&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="security" aria-hidden="true"></span><h3 data-toc-id="security"><a href="#security" class="heading-anchor" aria-label="Link to this section">#</a>Security</h3>
+<p>The parser includes built-in protections:</p>
+<ul>
+<li><strong>XXE prevention</strong>: External entity loading is disabled (<code>LIBXML_NONET</code>).</li>
+<li><strong>Entity expansion attacks</strong>: The parser does not use <code>LIBXML_NOENT</code>, preventing &quot;Billion Laughs&quot; attacks.</li>
+<li><strong>Input size limit</strong>: Defaults to 10 MB. Configurable via the constructor:</li>
+</ul>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-variable">$parser</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">DomParser</span><span class="polar-punctuation">(</span>
+    <span class="polar-constant">profile</span><span class="polar-punctuation">:</span> <span class="polar-constant">ParseProfile</span><span class="polar-operator">::</span><span class="polar-constant">LENIENT</span><span class="polar-punctuation">,</span>
+    <span class="polar-constant">maxInputSize</span><span class="polar-punctuation">:</span> <span class="polar-number">5</span> <span class="polar-operator">*</span> <span class="polar-number">1024</span> <span class="polar-operator">*</span> <span class="polar-number">1024</span> <span class="polar-comment">// 5 MB</span>
+<span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="parse-profiles" aria-hidden="true"></span><h2 data-toc-id="parse-profiles"><a href="#parse-profiles" class="heading-anchor" aria-label="Link to this section">#</a>Parse Profiles</h2>
+<p>The <code>ParseProfile</code> enum controls how the parser handles errors and edge cases.</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ParseProfile::STRICT</code></td>
+<td>Throws on any XML parse error. Best for development and spec validation.</td>
+</tr>
+<tr>
+<td><code>ParseProfile::LENIENT</code></td>
+<td>Records warnings but preserves input. Best for real-world SVGs. Default.</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Parser\DomParser</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Parser\ParseProfile</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Strict: will throw ParseException on any XML error</span>
+<span class="polar-variable">$parser</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">DomParser</span><span class="polar-punctuation">(</span><span class="polar-constant">ParseProfile</span><span class="polar-operator">::</span><span class="polar-constant">STRICT</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Lenient: tolerates minor issues (default)</span>
+<span class="polar-variable">$parser</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">DomParser</span><span class="polar-punctuation">(</span><span class="polar-constant">ParseProfile</span><span class="polar-operator">::</span><span class="polar-constant">LENIENT</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-comment">// Change profile after construction</span>
+<span class="polar-variable">$parser</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">setProfile</span><span class="polar-punctuation">(</span><span class="polar-constant">ParseProfile</span><span class="polar-operator">::</span><span class="polar-constant">STRICT</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="supported-elements" aria-hidden="true"></span><h2 data-toc-id="supported-elements"><a href="#supported-elements" class="heading-anchor" aria-label="Link to this section">#</a>Supported Elements</h2>
+<p>The parser recognizes all standard SVG elements: shapes (<code>rect</code>, <code>circle</code>, <code>ellipse</code>, <code>line</code>, <code>polyline</code>, <code>polygon</code>, <code>path</code>), structural elements (<code>g</code>, <code>defs</code>, <code>symbol</code>, <code>use</code>), text (<code>text</code>, <code>tspan</code>, <code>textPath</code>), gradients, filters, clipping/masking, and animation elements. Unknown elements are silently skipped in lenient mode.</p>
+<span class="heading-target" id="error-handling" aria-hidden="true"></span><h2 data-toc-id="error-handling"><a href="#error-handling" class="heading-anchor" aria-label="Link to this section">#</a>Error Handling</h2>
+<p>Both loader and parser throw specific exceptions:</p>
+<ul>
+<li><code>Atelier\Svg\Exception\RuntimeException</code> - file not found, unreadable, or exceeds the configured size limit (loader).</li>
+<li><code>Atelier\Svg\Exception\ParseException</code> - invalid XML, missing root <code>&lt;svg&gt;</code> element, or any XML error when using <code>ParseProfile::STRICT</code> (parser).</li>
+</ul>
+<p>Both implement <code>Atelier\Svg\Exception\SvgExceptionInterface</code> and extend <code>\RuntimeException</code>.</p>
+<span class="heading-target" id="via-the-facade" aria-hidden="true"></span><h3 data-toc-id="via-the-facade"><a href="#via-the-facade" class="heading-anchor" aria-label="Link to this section">#</a>Via the facade</h3>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-operator">&lt;</span><span class="polar-punctuation">?</span><span class="polar-constant">php</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Svg</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Exception\ParseException</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Exception\RuntimeException</span><span class="polar-punctuation">;</span>
+
+<span class="polar-keyword-control">try</span> <span class="polar-punctuation">{</span>
+    <span class="polar-variable">$svg</span> <span class="polar-operator">=</span> <span class="polar-constant">Svg</span><span class="polar-operator">::</span><span class="polar-function-call">load</span><span class="polar-punctuation">(</span><span class="polar-string">&#039;icon.svg&#039;</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">}</span> <span class="polar-keyword-control">catch</span> <span class="polar-punctuation">(</span><span class="polar-constant">RuntimeException</span> <span class="polar-variable">$e</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+    <span class="polar-comment">// File missing, unreadable, or too large</span>
+    <span class="polar-keyword-control">echo</span> <span class="polar-string">&#039;Load error: &#039;</span> <span class="polar-operator">.</span> <span class="polar-variable">$e</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getMessage</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">}</span> <span class="polar-keyword-control">catch</span> <span class="polar-punctuation">(</span><span class="polar-constant">ParseException</span> <span class="polar-variable">$e</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+    <span class="polar-comment">// Malformed XML or not an SVG document</span>
+    <span class="polar-keyword-control">echo</span> <span class="polar-string">&#039;Parse error: &#039;</span> <span class="polar-operator">.</span> <span class="polar-variable">$e</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getMessage</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">}</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="via-domparser-directly" aria-hidden="true"></span><h3 data-toc-id="via-domparser-directly"><a href="#via-domparser-directly" class="heading-anchor" aria-label="Link to this section">#</a>Via DomParser directly</h3>
+<p><code>ParseProfile::STRICT</code> throws on the first XML warning; <code>ParseProfile::LENIENT</code> records warnings and continues.</p>
+<div class="code-block" data-controller="clipboard"><pre data-lang="php"><code><span class="polar-operator">&lt;</span><span class="polar-punctuation">?</span><span class="polar-constant">php</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Parser\DomParser</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Parser\ParseProfile</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">use</span> <span class="polar-constant">Atelier\Svg\Exception\ParseException</span><span class="polar-punctuation">;</span>
+
+<span class="polar-variable">$parser</span> <span class="polar-operator">=</span> <span class="polar-keyword-operator">new</span> <span class="polar-function-call">DomParser</span><span class="polar-punctuation">(</span><span class="polar-constant">ParseProfile</span><span class="polar-operator">::</span><span class="polar-constant">STRICT</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+
+<span class="polar-keyword-control">try</span> <span class="polar-punctuation">{</span>
+    <span class="polar-variable">$document</span> <span class="polar-operator">=</span> <span class="polar-variable">$parser</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">parse</span><span class="polar-punctuation">(</span><span class="polar-variable">$svgString</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">}</span> <span class="polar-keyword-control">catch</span> <span class="polar-punctuation">(</span><span class="polar-constant">ParseException</span> <span class="polar-variable">$e</span><span class="polar-punctuation">)</span> <span class="polar-punctuation">{</span>
+    <span class="polar-keyword-control">echo</span> <span class="polar-string">&#039;Parse error: &#039;</span> <span class="polar-operator">.</span> <span class="polar-variable">$e</span><span class="polar-operator">-&gt;</span><span class="polar-function-call">getMessage</span><span class="polar-punctuation">(</span><span class="polar-punctuation">)</span><span class="polar-punctuation">;</span>
+<span class="polar-punctuation">}</span>
+</code></pre><button class="code-copy" data-action="click->clipboard#copy" aria-label="Copy code"><svg class="icon-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="icon-check" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></button></div>
+<span class="heading-target" id="file-not-found-vs-parse-failure" aria-hidden="true"></span><h3 data-toc-id="file-not-found-vs-parse-failure"><a href="#file-not-found-vs-parse-failure" class="heading-anchor" aria-label="Link to this section">#</a>File not found vs. parse failure</h3>
+<p><code>RuntimeException</code> is thrown before parsing begins - the file could not be read. <code>ParseException</code> is thrown after the file is read but the content is not valid SVG XML. Catching both lets you distinguish input problems from infrastructure problems.</p>
+<span class="heading-target" id="see-also" aria-hidden="true"></span><h2 data-toc-id="see-also"><a href="#see-also" class="heading-anchor" aria-label="Link to this section">#</a>See also</h2>
+<ul>
+<li><a href="../">Document Overview</a>: What is a Document</li>
+<li><a href="../creating/">Creating SVGs</a>: Building SVGs from scratch</li>
+<li><a href="../validation/">Validation</a>: Validating parsed documents</li>
+</ul>
+
+            <nav class="prev-next">
+            <a href="/document/creating/">
+            <span class="label">Previous</span>
+            <span class="title">Creating</span>
+        </a>
+                <a href="/document/validation/" class="next">
+            <span class="label">Next</span>
+            <span class="title">Validation</span>
+        </a>
+    </nav>
+        </article>
+    </main>
+
+        <aside class="page-toc">
+    <div class="nav-tree">
+        <div class="section">
+            <span class="section-title">On this page</span>
+            <ul class="links">
+                                    <li class="toc-h2">
+                        <a href="#loading-with-the-svg-facade">Loading with the Svg Facade</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#domloader">DomLoader</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#domparser">DomParser</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#parse-profiles">Parse Profiles</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#supported-elements">Supported Elements</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#error-handling">Error Handling</a>
+                    </li>
+                                    <li class="toc-h2">
+                        <a href="#see-also">See also</a>
+                    </li>
+                            </ul>
+        </div>
+    </div>
+</aside>
+    </div>
+
+<footer class="site-footer">
+    <div class="footer-left">
+        <a href="https://ateliersvg.com/" rel="noopener noreferrer">Atelier SVG</a>
+        <span>2026</span>
+        <a href="https://smnandre.dev" rel="author noopener noreferrer">Simon Andr&eacute;</a>
+    </div>
+    <div class="footer-right">
+        <a href="/about/">About</a>
+        <a href="/legal/">Legal</a>
+        <a href="/privacy/">Privacy</a>
+    </div>
+</footer>
+</body>
+</html>
